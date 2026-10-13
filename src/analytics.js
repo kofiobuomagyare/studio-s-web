@@ -2,15 +2,28 @@
 // unless VITE_PLAUSIBLE_DOMAIN is set at build time AND the visitor accepts
 // tracking in the consent banner. See README "Analytics & privacy".
 const CONSENT_KEY = "studio-s-consent";
+const CONSENT_DAYS = 180;
 const PLAUSIBLE_SRC = import.meta.env.VITE_PLAUSIBLE_SRC || "https://plausible.io/js/manual.js";
 
 export function analyticsConfigured() {
   return Boolean(import.meta.env.VITE_PLAUSIBLE_DOMAIN);
 }
 
+function cookieAttrs(days) {
+  // Domain is intentionally omitted so the cookie stays host-only (never
+  // leaks to subdomains). Secure is added on HTTPS, which Vercel enforces.
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  return `; Max-Age=${days * 86400}; Path=/; SameSite=Lax${secure}`;
+}
+
 export function getConsent() {
   try {
-    return window.localStorage.getItem(CONSENT_KEY);
+    const pair = document.cookie
+      .split("; ")
+      .find((c) => c.startsWith(`${encodeURIComponent(CONSENT_KEY)}=`));
+    if (!pair) return null;
+    const value = decodeURIComponent(pair.slice(pair.indexOf("=") + 1));
+    return value === "accepted" || value === "declined" ? value : null;
   } catch {
     return null;
   }
@@ -18,9 +31,17 @@ export function getConsent() {
 
 function setStoredConsent(value) {
   try {
-    window.localStorage.setItem(CONSENT_KEY, value);
+    document.cookie = `${encodeURIComponent(CONSENT_KEY)}=${encodeURIComponent(value)}${cookieAttrs(CONSENT_DAYS)}`;
   } catch {
-    /* private mode etc. — consent simply won't persist */
+    /* cookies blocked — the banner simply reappears next visit */
+  }
+}
+
+export function clearConsent() {
+  try {
+    document.cookie = `${encodeURIComponent(CONSENT_KEY)}=; Max-Age=0; Path=/; SameSite=Lax`;
+  } catch {
+    /* ignore */
   }
 }
 

@@ -85,15 +85,20 @@ instagramUrl    // https://instagram.com/studio_s.gh
   security headers (HSTS, nosniff, SAMEORIGIN framing, referrer/permissions policies,
   CSP). HTTPS + HTTP→HTTPS redirect come from the host — Vercel enforces both by
   default. On other hosts (e.g. Netlify), replicate the headers there.
-- **Domain checklist:** replace `https://www.example.com` in `public/sitemap.xml` and
-  `public/robots.txt` with the production domain; the runtime canonical + OG tags
-  derive from `window.location` automatically. For full link-unfurl support on
+- **Domain checklist:** `public/sitemap.xml` and `public/robots.txt` point at
+  `https://studio-s-web.vercel.app` — update both if the domain ever changes.
+  The runtime canonical + OG tags derive from `window.location` automatically. For full link-unfurl support on
   scrapers that don't run JavaScript, add prerendering (e.g. `vite-plugin-prerender`).
-- **Analytics (optional, off by default):** set a `VITE_PLAUSIBLE_DOMAIN` env var at build
-  time (plus optional `VITE_PLAUSIBLE_SRC` for self-hosted Plausible). The consent
-  banner then appears on first visit; tracking scripts load only after explicit
+- **Analytics (live in production):** set `VITE_PLAUSIBLE_DOMAIN=studio-s-web.vercel.app`
+  in your host's environment settings (Vercel → Project Settings → Environment
+  Variables) — all `.env*` files are git-ignored and never committed, so the repo
+  alone won't enable tracking. Copy `.env.example` to `.env.local` to test locally.
+  The consent banner appears on first visit; tracking scripts load only after explicit
   **Accept**, pageviews fire per route, and booking-CTA clicks are recorded as
-  `Booking CTA` events. Declining stores nothing but the refusal, locally.
+  `Booking CTA` events. The choice persists in a `studio-s-consent` cookie
+  (`Secure`, `SameSite=Lax`, host-only, `Path=/`, 180 days). Declining stores
+  nothing but the refusal. Plausible itself is cookieless; also add the domain in
+  your Plausible dashboard or events won't be received.
 - **Legal:** `/privacy` and `/terms` are written for this studio's actual data flows
   (Google Form bookings, email enquiries, no accounts) but are **not a substitute
   for legal counsel** — have them reviewed before launch.

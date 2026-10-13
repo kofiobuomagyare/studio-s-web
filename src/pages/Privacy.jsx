@@ -20,7 +20,7 @@ export default function Privacy() {
         <ul>
           <li><b>Booking requests:</b> when you submit the official Google Form, Google collects your name, contact details, preferred dates and project brief on our behalf. That data is governed by Google&apos;s privacy terms as well as this policy.</li>
           <li><b>Email enquiries:</b> anything you choose to send to studios@smartlinepublishers.com.</li>
-          <li><b>Consent choices:</b> your cookie/analytics preference is stored only in your own browser (local storage) — never sent to us.</li>
+          <li><b>Consent choice:</b> whether you accepted or declined tracking is stored in a <code>studio-s-consent</code> cookie on your own device (Secure, SameSite=Lax, host-only, up to 6 months) — it is never sent to us or any third party.</li>
         </ul>
         <h2 className="display h-md">What we don&apos;t do</h2>
         <ul>

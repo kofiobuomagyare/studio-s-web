@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-# TODO: replace with the production domain
-Sitemap: https://www.example.com/sitemap.xml
+# Production domain
+Sitemap: https://studio-s-web.vercel.app/sitemap.xml

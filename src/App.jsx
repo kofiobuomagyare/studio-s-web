@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Routes, useLocation } from "react-router-dom";
 import { Footer, Header } from "./components/Layout.jsx";
 import ConsentBanner from "./components/ConsentBanner.jsx";
+import BackToTop from "./components/BackToTop.jsx";
 import { analyticsConfigured, getConsent, loadAnalytics, trackPageview } from "./analytics.js";
 import { usePageMeta } from "./hooks.js";
 import Home from "./pages/Home.jsx";
@@ -80,9 +81,11 @@ function NotFound() {
 }
 
 export default function App() {
+  const [consentOpen, setConsentOpen] = useState(false);
   useEffect(() => {
     // Resume previously-consented tracking (fresh consent flows via the banner).
     if (analyticsConfigured() && getConsent() === "accepted") loadAnalytics();
+    setConsentOpen(analyticsConfigured() && getConsent() === null);
   }, []);
   return (
     <BrowserRouter>
@@ -94,7 +97,8 @@ export default function App() {
         <AnimatedRoutes />
       </main>
       <Footer />
-      <ConsentBanner />
+      <BackToTop lifted={consentOpen} />
+      <ConsentBanner onResolve={() => setConsentOpen(false)} />
     </BrowserRouter>
   );
 }
