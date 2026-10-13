@@ -22,7 +22,7 @@ export default function ConsentBanner({ onResolve } = {}) {
       <div className="consent-actions">
         <button
           type="button"
-          className="btn btn-solid btn-sm"
+          className="btn btn-ember btn-sm"
           onClick={() => { acceptTracking(); done(); }}
         >
           Accept

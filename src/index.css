@@ -184,6 +184,9 @@ footer{margin-top:40px;background:var(--ink);color:#EDE6D5;border-radius:28px 28
 .consent p b{color:#fff}
 .consent a{color:#fff}
 .consent-actions{display:flex;gap:10px;flex-wrap:wrap}
+/* Ghost buttons assume a light backdrop — restyle for the dark banner */
+.consent .btn-ghost{border-color:rgba(237,230,213,.5);color:#EDE6D5}
+.consent .btn-ghost:hover{background:#EDE6D5;border-color:#EDE6D5;color:var(--ink)}
 @keyframes consentIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 /* Honeypot field: invisible to humans, irresistible to bots */
 .hp-field{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
