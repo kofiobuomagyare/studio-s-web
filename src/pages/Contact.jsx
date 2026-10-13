@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { BookingLink } from "../components/Layout.jsx";
 import { STUDIO_S_CONFIG } from "../config.js";
@@ -5,6 +6,14 @@ import { usePageMeta } from "../hooks.js";
 
 export default function Contact() {
   usePageMeta("Contact — Studio S", "Contact Studio S: enquiries, location, socials and booking shortcut.");
+  const [formError, setFormError] = useState("");
+  const handleEnquiry = (e) => {
+    // Honeypot: bots fill it, humans never see it.
+    if (e.currentTarget.querySelector(".hp-field input")?.value) {
+      e.preventDefault();
+      setFormError("Something about that submission looked automated — please email us directly instead.");
+    }
+  };
   return (
     <>
       <div className="page-hero"><div className="page-hero-inner">
@@ -39,11 +48,15 @@ export default function Contact() {
             />
           </div>
           <p className="hint"><a href="https://www.google.com/maps/dir//Smartline+Publishers+Ltd,+Tema/@5.6352684,-0.1214246,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0xfdf846e1c754ecb:0x71f0dcdabf4bbe65!2m2!1d-0.0995895!2d5.6370483?entry=ttu" target="_blank" rel="noopener">Get directions</a> · <a href="https://www.google.com/maps/search/?api=1&query=Smartline+Publishers+Ltd+Tema+Ghana" target="_blank" rel="noopener">View larger map</a></p>
-          <form action={`mailto:${STUDIO_S_CONFIG.email}`} method="get" encType="text/plain">
+          <form action={`mailto:${STUDIO_S_CONFIG.email}`} method="get" encType="text/plain" onSubmit={handleEnquiry}>
             <label className="fl" htmlFor="n">Your name</label>
             <input className="fl" id="n" name="subject" required autoComplete="name" placeholder="Adaeze O." />
             <label className="fl" htmlFor="m">What are you making?</label>
             <textarea className="fl" id="m" name="body" rows={4} required placeholder="Podcast, 3 hosts, hoping for Saturday afternoon…" />
+            <span className="hp-field" aria-hidden="true">
+              <label>Company (leave blank)<input type="text" name="company" tabIndex={-1} autoComplete="off" /></label>
+            </span>
+            {formError && <p className="form-error" role="alert">{formError}</p>}
             <p style={{ marginTop: 12 }}><button className="btn btn-solid" type="submit">Compose email enquiry</button></p>
             <p className="hint">This opens your email app — for a confirmed date, use the booking form instead.</p>
           </form>

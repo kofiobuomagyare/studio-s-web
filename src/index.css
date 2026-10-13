@@ -1,5 +1,5 @@
-/* Studio S — Studio of Stories | Design system */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Space+Grotesk:wght@300..700&display=swap');
+/* Studio S — Studio of Stories | Design system
+   (Fonts load via <link> tags in index.html for faster first paint.) */
 
 :root{
   --paper:#EFE9DB;
@@ -63,8 +63,8 @@ a{color:inherit}
 .btn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:13px 22px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid var(--ink);cursor:pointer;transition:transform .18s ease,background .18s ease,color .18s ease}
 .btn-solid{background:var(--ink);color:var(--paper)}
 .btn-solid:hover{background:var(--ember);border-color:var(--ember);transform:translateY(-1px)}
-.btn-ember{background:var(--ember);border-color:var(--ember);color:#fff}
-.btn-ember:hover{background:var(--ember-deep);transform:translateY(-1px)}
+.btn-ember{background:var(--ember-deep);border-color:var(--ember-deep);color:#fff}
+.btn-ember:hover{background:#8F2A04;border-color:#8F2A04;transform:translateY(-1px)}
 .btn-ghost{background:transparent;color:var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:var(--paper)}
 .btn-light{border-color:rgba(255,255,255,.35);color:#fff}
@@ -178,6 +178,16 @@ footer{margin-top:40px;background:var(--ink);color:#EDE6D5;border-radius:28px 28
 /* Giant watermark wordmark: fills the footer's empty space, cropped
    flush at the page end like a studio sign-off. Decorative only. */
 .foot-mark{font-family:var(--font-display);font-weight:800;font-size:clamp(90px,21vw,320px);line-height:.82;letter-spacing:-.035em;text-align:center;white-space:nowrap;color:rgba(237,230,213,.09);margin:6px 0 -.16em;user-select:none}
+/* Consent banner: bottom card, only rendered when tracking is configured */
+.consent{position:fixed;left:var(--pad);right:var(--pad);bottom:16px;z-index:120;max-width:640px;margin:0 auto;background:var(--ink);color:#EDE6D5;border-radius:18px;padding:18px 20px;box-shadow:0 30px 60px -20px rgba(0,0,0,.55);display:grid;gap:12px;animation:consentIn .5s var(--ease-out) both}
+.consent p{margin:0;font-size:14px;color:#CFC6B4}
+.consent p b{color:#fff}
+.consent a{color:#fff}
+.consent-actions{display:flex;gap:10px;flex-wrap:wrap}
+@keyframes consentIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* Honeypot field: invisible to humans, irresistible to bots */
+.hp-field{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.form-error{background:#FDECE4;border:1px solid var(--ember-deep);color:#7A2403;border-radius:12px;padding:12px 16px;font-size:14px}
 .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:26px;padding:44px 0 26px}
 .foot-grid a{color:#CFC6B4;text-decoration:none;font-size:14.5px;display:block;padding:4px 0}
 .foot-grid a:hover{color:#fff;text-decoration:underline}
@@ -252,7 +262,7 @@ input.fl,select.fl,textarea.fl{width:100%;font:inherit;padding:12px 14px;border-
   .head-pill .btn-solid{display:none}
   .mobile-nav.open{display:block;position:absolute;top:calc(100% + 8px);left:var(--pad);right:var(--pad);max-width:var(--max);margin:0 auto;background:var(--ink);color:#fff;border-radius:18px;padding:10px;z-index:70;box-shadow:0 30px 60px -20px rgba(0,0,0,.55)}
   .mobile-nav a{display:block;color:#fff;text-decoration:none;padding:12px 14px;border-radius:12px;font-weight:600}
-  .mobile-nav a[aria-current="page"]{background:var(--ember)}
+  .mobile-nav a[aria-current="page"]{background:var(--ember-deep)}
   .foot-grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:620px){
@@ -266,7 +276,7 @@ input.fl,select.fl,textarea.fl{width:100%;font:inherit;padding:12px 14px;border-
 /* ---------- Hero service rotator ---------- */
 .hero-rotator img.hero-slide{opacity:0;transition:opacity .9s ease}
 .hero-rotator img.hero-slide.active{opacity:1}
-.hero-tag{position:absolute;left:14px;top:14px;background:var(--ember);color:#fff;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;z-index:2}
+.hero-tag{position:absolute;left:14px;top:14px;background:var(--ember-deep);color:#fff;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;z-index:2}
 .hero-caption{animation:heroCap .5s ease}
 @keyframes heroCap{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 /* ---------- Motion system (additive; layout & palette untouched) ---------- */

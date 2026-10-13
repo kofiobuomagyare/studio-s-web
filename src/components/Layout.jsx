@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { STUDIO_S_CONFIG } from "../config.js";
+import { trackBookingClick } from "../analytics.js";
 import studioLogo from "../assets/studio-s-logo.svg";
 
 export function BookingLink({ children, className, to = "/booking" }) {
@@ -9,13 +10,13 @@ export function BookingLink({ children, className, to = "/booking" }) {
   const isPlaceholder = external.includes("PLACEHOLDER");
   if (!isPlaceholder) {
     return (
-      <a className={className} href={external} target="_blank" rel="noopener">
+      <a className={className} href={external} target="_blank" rel="noopener" onClick={trackBookingClick}>
         {children}
       </a>
     );
   }
   return (
-    <Link className={className} to={to}>
+    <Link className={className} to={to} onClick={trackBookingClick}>
       {children}
     </Link>
   );
@@ -107,6 +108,8 @@ export function Footer() {
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
             <Link to="/contact#visit">Location</Link>
+            <Link to="/privacy">Privacy Policy</Link>
+            <Link to="/terms">Terms &amp; Conditions</Link>
           </div>
           <div>
             <b>Follow</b>
