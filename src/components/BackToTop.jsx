@@ -1,17 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-/* Back-to-top: appears as the reader nears the bottom of the page and
-   scrolls smoothly home on click. Instant jump under reduced motion. */
+/* Back-to-top: appears as soon as the reader starts scrolling down the page,
+   stays visible while scrolling, and scrolls smoothly home on click. Instant
+   jump under reduced motion. */
 export default function BackToTop({ lifted = false }) {
   const [visible, setVisible] = useState(false);
+  const [inFooter, setInFooter] = useState(false);
+  const btnRef = useRef(null);
 
   useEffect(() => {
     let ticking = false;
     const check = () => {
       ticking = false;
-      const nearBottom =
-        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500;
-      setVisible(nearBottom);
+      setVisible(window.scrollY > 0);
+      const footer = document.querySelector("footer");
+      if (footer) {
+        const rect = footer.getBoundingClientRect();
+        // The indicator is pinned to the bottom-right; treat it as being
+        // "within the footer" once the footer reaches that area of the viewport.
+        setInFooter(rect.top <= window.innerHeight - 24);
+      } else {
+        setInFooter(false);
+      }
     };
     const onScroll = () => {
       if (!ticking) {
@@ -37,8 +47,9 @@ export default function BackToTop({ lifted = false }) {
 
   return (
     <button
+      ref={btnRef}
       type="button"
-      className={`to-top${visible ? " show" : ""}${lifted ? " lifted" : ""}`}
+      className={`to-top${visible ? " show" : ""}${lifted ? " lifted" : ""}${inFooter ? " in-footer" : ""}`}
       aria-label="Back to top"
       tabIndex={visible ? 0 : -1}
       onClick={goTop}

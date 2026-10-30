@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
 import BRAND_IMAGE_ARCHIVE from "../instagramArchive.js";
 
 async function fetchInstagramFeed(signal) {
@@ -27,7 +29,12 @@ export default function InstagramGallery({ preview = false }) {
   const [lightbox, setLightbox] = useState(null);
   const [visibleCount, setVisibleCount] = useState(24);
   const [syncUnavailable, setSyncUnavailable] = useState(false);
+  const [carouselPosition, setCarouselPosition] = useState({ page: 1, pages: 1, canPrevious: false, canNext: false });
+  const [isDragging, setIsDragging] = useState(false);
   const hasLoadedFeed = useRef(false);
+  const carouselRef = useRef(null);
+  const dragRef = useRef(null);
+  const draggedRef = useRef(false);
   const closeButtonRef = useRef(null);
   const previousFocusRef = useRef(null);
   const lightboxWasOpenRef = useRef(false);
@@ -77,10 +84,55 @@ export default function InstagramGallery({ preview = false }) {
     [posts]
   );
   const shownPosts = preview ? posts.slice(0, 6) : posts.slice(0, visibleCount);
+  const previewImages = preview ? images.slice(0, 12) : [];
   const isLightboxOpen = lightbox !== null;
 
   function closeLightbox() {
     setLightbox(null);
+  }
+
+  const updateCarouselPosition = useCallback(() => {
+    const track = carouselRef.current;
+    if (!track) return;
+    const pages = Math.max(1, Math.ceil(track.scrollWidth / track.clientWidth));
+    const page = Math.min(pages, Math.floor((track.scrollLeft + 1) / track.clientWidth) + 1);
+    setCarouselPosition({
+      page,
+      pages,
+      canPrevious: track.scrollLeft > 1,
+      canNext: track.scrollLeft + track.clientWidth < track.scrollWidth - 1,
+    });
+  }, []);
+
+  function scrollCarousel(direction) {
+    const track = carouselRef.current;
+    if (!track) return;
+    track.scrollBy({
+      left: direction * track.clientWidth,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  }
+
+  function onCarouselPointerDown(event) {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    dragRef.current = { pointerId: event.pointerId, x: event.clientX, scrollLeft: event.currentTarget.scrollLeft };
+    setIsDragging(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function onCarouselPointerMove(event) {
+    if (!dragRef.current || dragRef.current.pointerId !== event.pointerId) return;
+    const distance = event.clientX - dragRef.current.x;
+    if (Math.abs(distance) > 5) draggedRef.current = true;
+    event.currentTarget.scrollLeft = dragRef.current.scrollLeft - distance;
+  }
+
+  function onCarouselPointerUp(event) {
+    if (dragRef.current?.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    setIsDragging(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    window.setTimeout(() => { draggedRef.current = false; }, 0);
   }
 
   useEffect(() => {
@@ -94,6 +146,8 @@ export default function InstagramGallery({ preview = false }) {
     }
     lightboxWasOpenRef.current = true;
     previousFocusRef.current = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
     const onKeyDown = (event) => {
       if (event.key === "Escape") closeLightbox();
@@ -102,9 +156,20 @@ export default function InstagramGallery({ preview = false }) {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [isLightboxOpen, images.length]);
+
+  useEffect(() => {
+    if (!preview) return undefined;
+    const track = carouselRef.current;
+    if (!track) return undefined;
+    updateCarouselPosition();
+    const observer = new ResizeObserver(updateCarouselPosition);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [preview, previewImages.length, updateCarouselPosition]);
 
   if (status === "loading" && !posts.length) {
     return <p className="instagram-state" role="status">Loading the latest work from Instagram…</p>;
@@ -141,7 +206,77 @@ export default function InstagramGallery({ preview = false }) {
           onClick={() => { setStatus("loading"); loadFeed(); }}
         >Try Instagram again</button>
       )}
-      <div className={`instagram-grid${preview ? " instagram-grid-preview" : ""}`}>
+      {preview ? (
+        <div className="instagram-showcase" aria-label="Selected Studio S images">
+          <div className="instagram-carousel-controls">
+            <p className="instagram-carousel-count" aria-live="polite">
+              {previewImages.length ? `Collection ${carouselPosition.page} of ${carouselPosition.pages}` : "Selected Studio S photos"}
+            </p>
+            <div className="instagram-carousel-buttons">
+              <button
+                className="instagram-carousel-arrow"
+                type="button"
+                aria-label="Previous images"
+                disabled={!carouselPosition.canPrevious}
+                onClick={() => scrollCarousel(-1)}
+              >←</button>
+              <button
+                className="instagram-carousel-arrow"
+                type="button"
+                aria-label="Next images"
+                disabled={!carouselPosition.canNext}
+                onClick={() => scrollCarousel(1)}
+              >→</button>
+            </div>
+          </div>
+          <div
+            ref={carouselRef}
+            className={`instagram-carousel-track${isDragging ? " dragging" : ""}`}
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Selected Studio S images"
+            tabIndex={0}
+            onScroll={updateCarouselPosition}
+            onPointerDown={onCarouselPointerDown}
+            onPointerMove={onCarouselPointerMove}
+            onPointerUp={onCarouselPointerUp}
+            onPointerCancel={onCarouselPointerUp}
+            onClickCapture={(event) => {
+              if (!draggedRef.current) return;
+              event.preventDefault();
+              event.stopPropagation();
+              draggedRef.current = false;
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+                event.preventDefault();
+                scrollCarousel(event.key === "ArrowRight" ? 1 : -1);
+              }
+            }}
+          >
+            {previewImages.map((image, index) => (
+              <article className="instagram-card instagram-carousel-slide" key={image.id} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${previewImages.length}`}>
+                <button
+                  className="instagram-image"
+                  type="button"
+                  onClick={() => setLightbox(index)}
+                  aria-label={`Preview selected Studio S photo: ${image.alt || image.post.caption?.slice(0, 80) || "Studio S image"}`}
+                >
+                  <img src={image.src} alt={image.alt || image.post.caption?.slice(0, 140) || "Studio S image"} loading="lazy" decoding="async" />
+                </button>
+                <div className="instagram-card-copy">
+                  {image.post.timestamp && <time dateTime={image.post.timestamp}>{formatDate(image.post.timestamp)}</time>}
+                  {image.post.caption && <p>{image.post.caption}</p>}
+                  {image.post.permalink && <a href={image.post.permalink} target="_blank" rel="noopener noreferrer" draggable="false">View on Instagram ↗</a>}
+                </div>
+              </article>
+            ))}
+          </div>
+          <Link className="btn btn-ghost instagram-carousel-cta" to="/gallery">View All Images</Link>
+        </div>
+      ) : (
+      <>
+      <div className="instagram-grid">
         {shownPosts.map((post) => (
           <article className="instagram-card" key={post.id}>
             <div className={`instagram-post-grid${post.images.length === 1 ? " single" : ""}`}>
@@ -178,7 +313,9 @@ export default function InstagramGallery({ preview = false }) {
           </button>
         </div>
       )}
-      {lightbox !== null && images[lightbox] && (
+      </>
+      )}
+      {lightbox !== null && images[lightbox] && createPortal(
         <div
           className="lightbox open instagram-lightbox"
           role="dialog"
@@ -186,29 +323,30 @@ export default function InstagramGallery({ preview = false }) {
           aria-label="Gallery image preview"
           onClick={closeLightbox}
         >
-          <button ref={closeButtonRef} className="btn btn-light btn-sm instagram-lightbox-close" type="button" onClick={closeLightbox}>Close ×</button>
+          <button ref={closeButtonRef} className="btn btn-sm lightbox-control instagram-lightbox-close" type="button" onClick={closeLightbox}>Close ×</button>
           {images.length > 1 && (
             <button
-              className="btn btn-light btn-sm instagram-lightbox-prev"
+              className="btn btn-sm lightbox-control instagram-lightbox-prev"
               type="button"
               aria-label="Previous image"
               onClick={(event) => { event.stopPropagation(); setLightbox((lightbox - 1 + images.length) % images.length); }}
             >←</button>
           )}
           <figure className="instagram-lightbox-content" onClick={(event) => event.stopPropagation()}>
-            <img src={images[lightbox].src} alt={images[lightbox].post.caption?.slice(0, 140) || "Studio S Instagram post"} />
+            <img src={images[lightbox].src} alt={images[lightbox].alt || images[lightbox].post.caption?.slice(0, 140) || "Studio S Instagram post"} />
             {images[lightbox].post.caption && <figcaption>{images[lightbox].post.caption}</figcaption>}
             {images[lightbox].post.permalink && <a href={images[lightbox].post.permalink} target="_blank" rel="noopener noreferrer">View original post on Instagram ↗</a>}
           </figure>
           {images.length > 1 && (
             <button
-              className="btn btn-light btn-sm instagram-lightbox-next"
+              className="btn btn-sm lightbox-control instagram-lightbox-next"
               type="button"
               aria-label="Next image"
               onClick={(event) => { event.stopPropagation(); setLightbox((lightbox + 1) % images.length); }}
             >→</button>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

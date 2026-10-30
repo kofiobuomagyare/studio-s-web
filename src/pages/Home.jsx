@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal.jsx";
 import { BookingLink } from "../components/Layout.jsx";
@@ -76,6 +77,8 @@ export default function Home() {
     "Studio S (Studio of Stories) is a creative studio for podcasts, photoshoots, video production, sound production and animation. Explore spaces, rates and booking."
   );
   const [lightbox, setLightbox] = useState(null);
+  const closeButtonRef = useRef(null);
+  const isLightboxOpen = lightbox !== null;
   const reducedMotion = useReducedMotion();
   const [walkScene, setWalkScene] = useState(0);
   const heroSectionRef = useRef(null);
@@ -92,6 +95,23 @@ export default function Home() {
 
   const activeIndex = walkEnabled ? walkScene : 0;
   const current = HERO_SLIDES[activeIndex];
+  useEffect(() => {
+    if (!isLightboxOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus();
+    };
+  }, [isLightboxOpen]);
+
   return (
     <>
       <section className={`hero${walkEnabled ? " hero-scroll" : " hero-static"}`} aria-label="Introduction" ref={heroSectionRef}>
@@ -267,7 +287,6 @@ export default function Home() {
               <span className="kicker">Selected stories</span>
               <h2 className="display h-xl">Stories from <i>inside the house.</i></h2>
             </div>
-            <Link className="btn btn-ghost" to="/gallery">View Gallery</Link>
           </div>
           <InstagramGallery preview />
         </div>
@@ -320,11 +339,12 @@ export default function Home() {
         </div>
       </section>
 
-      {lightbox && (
-        <div className="lightbox open" role="dialog" aria-modal="true" aria-label="Image viewer" onClick={() => setLightbox(null)}>
-          <button className="btn btn-light btn-sm" style={{ position: "absolute", top: 18, right: 18 }} onClick={() => setLightbox(null)}>Close ✕</button>
+      {lightbox && createPortal(
+        <div className="lightbox open home-lightbox" role="dialog" aria-modal="true" aria-label="Studio spaces image preview" onClick={() => setLightbox(null)}>
+          <button ref={closeButtonRef} className="btn btn-sm lightbox-control home-lightbox-close" type="button" onClick={() => setLightbox(null)}>Close ×</button>
           <img src={lightbox.src} alt={lightbox.alt} onClick={(e) => e.stopPropagation()} />
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
