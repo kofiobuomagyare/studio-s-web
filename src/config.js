@@ -5,4 +5,5 @@ export const STUDIO_S_CONFIG = {
   email: "studios@smartlinepublishers.com",
   phone: "0302 810 641",
   instagramUrl: "https://instagram.com/studio_s.gh",
+  tiktokUrl: "https://www.tiktok.com/@studio.sgh",
 };

@@ -10,7 +10,13 @@ export function BookingLink({ children, className, to = "/booking" }) {
   const isPlaceholder = external.includes("PLACEHOLDER");
   if (!isPlaceholder) {
     return (
-      <a className={className} href={external} target="_blank" rel="noopener" onClick={trackBookingClick}>
+      <a
+        className={className}
+        href={external}
+        target="_blank"
+        rel="noopener"
+        onClick={trackBookingClick}
+      >
         {children}
       </a>
     );
@@ -36,31 +42,40 @@ const LINKS = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  useEffect(() => { setOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
   return (
     <header className="site-head">
       <div className="head-pill">
-          <Link className="brand" to="/" aria-label="Studio S — home">
-            <img src={studioLogo} alt="" className="brand-logo" aria-hidden="true" />
-            <b>Studio S</b>
-          </Link>
-          <nav className="nav" aria-label="Primary">
-            {LINKS.map(([label, to]) => (
-              <NavLink key={to} to={to} end={to === "/"} aria-current={undefined}>
-                {label}
-              </NavLink>
-            ))}
-          </nav>
-          <BookingLink className="btn btn-solid btn-sm">Request a Booking</BookingLink>
-          <button
-            className="menu-btn"
-            aria-expanded={open ? "true" : "false"}
-            aria-controls="mnav"
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? "Close" : "Menu"}
-          </button>
-        </div>
+        <Link className="brand" to="/" aria-label="Studio S — home">
+          <img
+            src={studioLogo}
+            alt=""
+            className="brand-logo"
+            aria-hidden="true"
+          />
+          <b>Studio S</b>
+        </Link>
+        <nav className="nav" aria-label="Primary">
+          {LINKS.map(([label, to]) => (
+            <NavLink key={to} to={to} end={to === "/"} aria-current={undefined}>
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+        <BookingLink className="btn btn-solid btn-sm">
+          Request a Booking
+        </BookingLink>
+        <button
+          className="menu-btn"
+          aria-expanded={open ? "true" : "false"}
+          aria-controls="mnav"
+          onClick={() => setOpen((v) => !v)}
+        >
+          {open ? "Close" : "Menu"}
+        </button>
+      </div>
       <nav
         className={`mobile-nav${open ? " open" : ""}`}
         id="mnav"
@@ -68,7 +83,12 @@ export function Header() {
         onClick={() => setOpen(false)}
       >
         {LINKS.map(([label, to]) => (
-          <NavLink key={to} to={to} end={to === "/"} onClick={() => setOpen(false)}>
+          <NavLink
+            key={to}
+            to={to}
+            end={to === "/"}
+            onClick={() => setOpen(false)}
+          >
             {label}
           </NavLink>
         ))}
@@ -84,12 +104,22 @@ export function Footer() {
       <div className="wrap">
         <div className="foot-grid">
           <div>
-            <Link to="/" className="brand brand-foot" aria-label="Studio S — home">
-              <img src={studioLogo} alt="" className="foot-logo" aria-hidden="true" />
+            <Link
+              to="/"
+              className="brand brand-foot"
+              aria-label="Studio S — home"
+            >
+              <img
+                src={studioLogo}
+                alt=""
+                className="foot-logo"
+                aria-hidden="true"
+              />
               <b>Studio S</b>
             </Link>
             <p style={{ color: "#A99E88", fontSize: 14 }}>
-              Studio of Stories — rooms &amp; production for podcasts, photoshoots, video, sound and animation.
+              Studio of Stories — rooms &amp; production for podcasts,
+              photoshoots, video, sound and animation.
             </p>
             <p>
               <BookingLink className="" to="/booking">
@@ -115,17 +145,29 @@ export function Footer() {
           </div>
           <div>
             <b>Follow</b>
-            <a href={STUDIO_S_CONFIG.instagramUrl} target="_blank" rel="noopener">Instagram</a>
-            <Link to="/contact">TikTok (link TBC)</Link>
-            <Link to="/contact">YouTube (link TBC)</Link>
+            <a
+              href={STUDIO_S_CONFIG.instagramUrl}
+              target="_blank"
+              rel="noopener"
+            >
+              Instagram
+            </a>
+            <a href={STUDIO_S_CONFIG.tiktokUrl} target="_blank" rel="noopener">
+              TikTok
+            </a>
+            {/* <Link to="/contact">YouTube (link TBC)</Link> */}
           </div>
         </div>
         <div className="foot-bottom">
-          <span>© {year} Studio S — Studio of Stories. All rights reserved.</span>
+          <span>
+            © {year} Studio S — Studio of Stories. All rights reserved.
+          </span>
           <span>Prices &amp; availability confirmed on request.</span>
         </div>
       </div>
-      <div className="foot-mark" aria-hidden="true">Studio&nbsp;S</div>
+      <div className="foot-mark" aria-hidden="true">
+        Studio&nbsp;S
+      </div>
     </footer>
   );
 }
