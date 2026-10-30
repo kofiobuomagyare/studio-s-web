@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Routes, useLocation } from "react-router-dom";
 import { Footer, Header } from "./components/Layout.jsx";
 import ConsentBanner from "./components/ConsentBanner.jsx";
+import Promotion from "./components/Promotion.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import { analyticsConfigured, getConsent, loadAnalytics, trackPageview } from "./analytics.js";
 import { usePageMeta } from "./hooks.js";
@@ -92,6 +93,7 @@ export default function App() {
       <a className="skip" href="#main">Skip to content</a>
       <ScrollToTop />
       <ImageFade />
+      <Promotion />
       <Header />
       <main id="main">
         <AnimatedRoutes />
