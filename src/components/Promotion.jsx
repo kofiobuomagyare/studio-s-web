@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import studioLogo from "../assets/studio-s-logo.svg";
 
 const STORAGE_KEY = "studio-s-podcast-support-promo";
-const APPLICATION_URL = "https://forms.gle/kCDFrUQ3AHKdztkC7?utm_source=chatgpt.com";
+const APPLICATION_URL = "https://forms.gle/kCDFrUQ3AHKdztkC7";
 const PODCAST_IMAGE =
   "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1200&auto=format&fit=crop";
 
@@ -80,7 +81,7 @@ export default function Promotion() {
     return (
       <aside className="promo-banner" aria-label="Podcast studio support promotion">
         <div className="promo-banner-inner">
-          <span className="promo-banner-mark" aria-hidden="true">S</span>
+          <img className="promo-banner-logo" src={studioLogo} alt="" aria-hidden="true" />
           <p>
             <strong>Got a podcast idea?</strong>{" "}
             Get 3 months of free studio support.
@@ -135,14 +136,14 @@ export default function Promotion() {
             3 months of <i>free studio support.</i>
           </h2>
           <p className="promo-description" id="promo-description">
-            What if your podcast idea is the one someone needs to hear? We&apos;re
-            sponsoring one exceptional idea with three months of free studio
-            support. Bring us your culture, business, wellness, entertainment,
-            lifestyle, education, or entirely-you idea.
+            What if your podcast idea is the one someone needs to hear?
+            We&apos;re sponsoring one exceptional idea with 3 months of free
+            studio support.
           </p>
-          <div className="promo-details">
-            <span><b>01</b> Exceptional podcast idea</span>
-            <span><b>02</b> C3 Coastal Estates, Accra</span>
+          <div className="promo-location">
+            <span>One exceptional idea</span>
+            <span aria-hidden="true">·</span>
+            <span>C3 Coastal Estates, Accra</span>
           </div>
           <a
             className="btn btn-ember promo-apply"
