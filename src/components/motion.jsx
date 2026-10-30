@@ -4,12 +4,20 @@ import { useEffect, useRef, useState } from "react";
    without a reduced-motion preference. Everyone else gets the
    calm static experience (which is also the SSR-safe default). */
 export function useReducedMotion() {
-  const [reduced] = useState(
+  const [reduced, setReduced] = useState(
     () =>
       typeof window !== "undefined" &&
       typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(preference.matches);
+    update();
+    preference.addEventListener("change", update);
+    return () => preference.removeEventListener("change", update);
+  }, []);
   return reduced;
 }
 
@@ -155,6 +163,88 @@ export function useMediaMotion({ tiltMax = 5, drift = 26 } = {}) {
     st.current.try = 0;
   };
   return { ref, onPointerMove, onPointerLeave, motionOn: enabled };
+}
+
+/* Scroll-scrubbed card stack: sticky positioning owns the pin while this
+   controller maps page progress directly to each card's depth and offset. */
+export function useScrollCardStack({ sectionRef, mediaRef, count = 5, enabled = true, onScene }) {
+  useEffect(() => {
+    if (!enabled) return;
+    const section = sectionRef.current;
+    const media = mediaRef.current;
+    if (!section || !media) return;
+    const slides = Array.from(media.querySelectorAll(".hero-slide"));
+    if (!slides.length) return;
+
+    media.classList.add("walk-ready");
+    let scene = -1;
+    let raf = 0;
+    let visible = true;
+
+    const render = () => {
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      const range = Math.max(1, section.offsetHeight - window.innerHeight);
+      const progress = clamp((window.scrollY - sectionTop) / range, 0, 1);
+      const stage = progress * (count - 1);
+      const spread = clamp(media.clientWidth * 0.027, 7, 16);
+      slides.forEach((el, i) => {
+        const relative = i - stage;
+        const distance = Math.abs(relative);
+        const turnProgress = clamp(-relative, 0, 1);
+        const easedTurn = turnProgress * turnProgress * (3 - 2 * turnProgress);
+        const depth = -distance * 24;
+        const x = Math.sign(relative) * distance * spread;
+        const y = distance * spread * 0.78 - Math.sin(turnProgress * Math.PI) * 38;
+        const scale = Math.max(0.92, 1 - distance * 0.012);
+        const opacity = Math.max(0.9, 1 - distance * 0.025);
+        const rotateY = -180 * easedTurn + Math.max(relative, 0) * 2;
+        const rotateX = Math.sin(turnProgress * Math.PI) * -2;
+        const rotateZ = Math.sign(relative) * Math.min(distance, 4) * 1.2;
+        el.style.opacity = opacity.toFixed(3);
+        el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${depth.toFixed(1)}px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) rotateZ(${rotateZ.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
+        el.style.zIndex = String(1000 - Math.round(distance * 10));
+      });
+      media.style.setProperty("--walk", progress.toFixed(4));
+
+      const next = Math.round(stage);
+      if (next !== scene) {
+        scene = next;
+        onScene?.(next);
+      }
+    };
+    const onScroll = () => {
+      if (raf || !visible) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        render();
+      });
+    };
+    const onResize = () => render();
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) onScroll();
+      },
+      { threshold: 0 }
+    );
+    io.observe(section);
+    render();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      slides.forEach((el) => {
+        el.style.opacity = "";
+        el.style.transform = "";
+        el.style.zIndex = "";
+      });
+      media.style.removeProperty("--walk");
+      media.classList.remove("walk-ready");
+    };
+  }, [enabled, count, onScene, sectionRef, mediaRef]);
 }
 
 /* Magnetic wrapper: nudges interactive children toward the cursor

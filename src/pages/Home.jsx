@@ -1,19 +1,67 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal.jsx";
 import { BookingLink } from "../components/Layout.jsx";
-import { Magnetic, ParticleField, VelocityMarquee } from "../components/motion.jsx";
+import { Magnetic, ParticleField, VelocityMarquee, useReducedMotion, useScrollCardStack } from "../components/motion.jsx";
 import { usePageMeta } from "../hooks.js";
 
 const HERO_SLIDES = [
-  { key: "podcast", label: "Podcast", src: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1400&auto=format&fit=crop", alt: "Podcast microphones in a warm studio", caption: "Podcast studio — set for conversation", to: "/services#podcast" },
-  { key: "photoshoot", label: "Photoshoot", src: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=1400&auto=format&fit=crop", alt: "Photographer directing a photoshoot in soft studio light", caption: "Daylight studio — composed for portraits", to: "/services#photoshoot" },
-  { key: "video", label: "Video", src: "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1400&auto=format&fit=crop", alt: "Cinema camera on a video set", caption: "Video stage — lit for moving image", to: "/services#video" },
-  { key: "sound", label: "Sound", src: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1400&auto=format&fit=crop", alt: "Mixing desk in a sound-treated studio", caption: "Sound room — tuned for clean audio", to: "/services#sound" },
-  { key: "animation", label: "Animation", src: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1400&auto=format&fit=crop", alt: "Colourful animation workspace on screen", caption: "Animation desk — built frame by frame", to: "/services#animation" },
+  {
+    key: "spark",
+    label: "01 · The spark",
+    chapter: "First, there is a feeling.",
+    title: "Every brand has",
+    accent: "a story worth telling.",
+    copy: "A point of view. A half-formed idea. Something you want the world to understand. That is where we begin.",
+    src: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1400&auto=format&fit=crop",
+    alt: "A considered creative studio space ready for a new idea",
+    caption: "Every good story starts with a little room to think.",
+  },
+  {
+    key: "thread",
+    label: "02 · Find the thread",
+    chapter: "We start by listening.",
+    title: "Find the thought",
+    accent: "only you can tell.",
+    copy: "We get close to the people, purpose and details that make your story yours — then find the clearest way to bring it out.",
+    src: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1400&auto=format&fit=crop",
+    alt: "Podcast microphones set up for an honest conversation",
+    caption: "Good questions make space for the real story.",
+  },
+  {
+    key: "world",
+    label: "03 · Shape the world",
+    chapter: "Then we find its form.",
+    title: "Give the idea",
+    accent: "a world to live in.",
+    copy: "A portrait, a set, a sound, a scene. We shape the right visual language and choose the right space for your story to feel real.",
+    src: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=1400&auto=format&fit=crop",
+    alt: "Photographer shaping a portrait on a softly lit set",
+    caption: "Light, space and detail turn a thought into a world.",
+  },
+  {
+    key: "make",
+    label: "04 · Bring it to life",
+    chapter: "Make something people can feel.",
+    title: "From first frame",
+    accent: "to final sound.",
+    copy: "Podcast, photography, film, sound and animation — thoughtful production turns the plan into something made to be experienced.",
+    src: "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1400&auto=format&fit=crop",
+    alt: "Cinema camera ready to capture a story on set",
+    caption: "Five creative crafts. One story, brought to life.",
+  },
+  {
+    key: "impact",
+    label: "05 · Make it matter",
+    chapter: "Now it can travel.",
+    title: "Make them feel",
+    accent: "something real.",
+    copy: "Because the best content does more than look good. It creates connection, stays with people and gives your brand a voice.",
+    src: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1400&auto=format&fit=crop",
+    alt: "Vibrant creative imagery representing a story reaching its audience",
+    caption: "A story made to connect, wherever it goes.",
+  },
 ];
-
-const HERO_INTERVAL = 8000;
 
 const GALLERY = [
   { src: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1000&auto=format&fit=crop", alt: "Sound-treated studio with mixing desk", title: "Sound & Podcast Room", sub: "Quiet, treated, mic-ready." },
@@ -27,70 +75,107 @@ export default function Home() {
     "Studio S (Studio of Stories) is a creative studio for podcasts, photoshoots, video production, sound production and animation. Explore spaces, rates and booking."
   );
   const [lightbox, setLightbox] = useState(null);
-  const [slide, setSlide] = useState(0);
-  const [hoverHold, setHoverHold] = useState(false);
-  const [reducedMotion] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-  const autoplay = !hoverHold && !reducedMotion;
-  useEffect(() => {
-    if (!autoplay) return;
-    const t = setTimeout(() => setSlide((s) => (s + 1) % HERO_SLIDES.length), HERO_INTERVAL);
-    return () => clearTimeout(t);
-  }, [slide, autoplay]);
-  const current = HERO_SLIDES[slide];
+  const reducedMotion = useReducedMotion();
+  const [walkScene, setWalkScene] = useState(0);
+  const heroSectionRef = useRef(null);
+  const heroMediaRef = useRef(null);
+
+  const walkEnabled = !reducedMotion;
+  useScrollCardStack({
+    sectionRef: heroSectionRef,
+    mediaRef: heroMediaRef,
+    count: HERO_SLIDES.length,
+    enabled: walkEnabled,
+    onScene: setWalkScene,
+  });
+
+  const activeIndex = walkEnabled ? walkScene : 0;
+  const current = HERO_SLIDES[activeIndex];
   return (
     <>
-      <section className="hero" aria-label="Introduction">
+      <section className={`hero${walkEnabled ? " hero-scroll" : " hero-static"}`} aria-label="Introduction" ref={heroSectionRef}>
         <div className="hero-frame">
           <figure
-            className="hero-media hero-rotator"
+            ref={heroMediaRef}
+            className="hero-media"
             style={{ margin: 0 }}
-            aria-roledescription="carousel"
-            aria-label="Studio services showcase"
-            onMouseEnter={() => setHoverHold(true)}
-            onMouseLeave={() => setHoverHold(false)}
-            onFocus={() => setHoverHold(true)}
-            onBlur={() => setHoverHold(false)}
+            aria-label="Studio S story in five chapters"
           >
             {HERO_SLIDES.map((s, i) => (
-              <img
+              <article
                 key={s.key}
-                src={s.src}
-                alt={i === slide ? s.alt : ""}
-                aria-hidden={i === slide ? undefined : "true"}
-                fetchPriority={i === 0 ? "high" : undefined}
-                loading={i === 0 ? undefined : "lazy"}
-                className={`hero-slide${i === slide ? " active" : ""}`}
-              />
+                className={`hero-slide${i === activeIndex ? " active" : ""}`}
+                aria-hidden={i === activeIndex ? undefined : "true"}
+              >
+                <div className="hero-card-face hero-card-front">
+                  <img
+                    src={s.src}
+                    alt={i === activeIndex ? s.alt : ""}
+                    fetchPriority={i === 0 ? "high" : undefined}
+                    loading={i === 0 || walkEnabled ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                  <div className="hero-card-copy">
+                    <span>{s.label}</span>
+                    <b>{s.title} <i>{s.accent}</i></b>
+                  </div>
+                </div>
+                <div className="hero-card-face hero-card-back" aria-hidden="true">
+                  <span>STUDIO OF STORIES</span>
+                  <b>S</b>
+                  <small>{String(i + 1).padStart(2, "0")} / {String(HERO_SLIDES.length).padStart(2, "0")}</small>
+                </div>
+              </article>
             ))}
-            <span className="hero-tag" aria-hidden="true">{current.label}</span>
+            <span className="hero-tag">{current.label}</span>
             <figcaption key={current.key} className="hero-caption">{current.caption}</figcaption>
+            {walkEnabled && (
+              <div className="hero-walkmeter" aria-hidden="true">
+                <span className="hero-walkmeter-hint">Follow the story</span>
+                <span className="hero-walkmeter-track"><i /></span>
+                <span className="hero-walkmeter-count">
+                  <b>{String(activeIndex + 1).padStart(2, "0")}</b> / {String(HERO_SLIDES.length).padStart(2, "0")}
+                </span>
+              </div>
+            )}
           </figure>
           <div className="hero-copy">
-            <span className="kicker">Studio of Stories — creative production house</span>
-            <h1 className="display h-giant hero-title">
-              <span className="mask-line"><span className="mask-inner">Every story deserves</span></span>
-              <span className="mask-line"><span className="mask-inner mask-inner-2"><i>a room of its own.</i></span></span>
-            </h1>
-            <p className="lede">
-              Studio S gives podcasters, photographers, filmmakers, musicians and animators professional rooms,
-              attentive crew and a calm place to make their best work.
-            </p>
+            <div className="hero-story" key={current.key}>
+              <span className="kicker">Studio of Stories · Creative production house</span>
+              <span className="hero-chapter">{current.chapter}</span>
+              <h1 className="display hero-title">
+                <span>{current.title}</span>
+                <i>{current.accent}</i>
+              </h1>
+              <p className="lede">{current.copy}</p>
+            </div>
             <div className="hero-ctas">
               <BookingLink className="btn btn-ember">Request a Booking</BookingLink>
               <Link className="btn btn-ghost" to="/spaces">Tour the spaces</Link>
             </div>
             <div className="hero-meta">
-              <div><b>05</b><span>production crafts</span></div>
-              <div><b>03</b><span>studio spaces</span></div>
-              <div><b>01</b><span>request-to-confirmation</span></div>
+              <span>Podcast · Photo · Film · Sound · Animation</span>
+              <span>One story, made with care.</span>
             </div>
           </div>
         </div>
+        {!walkEnabled && (
+          <div className="story-chapters" aria-label="The Studio S creative process">
+            {HERO_SLIDES.slice(1).map((scene) => (
+              <article className="story-chapter" key={scene.key}>
+                <img src={scene.src} alt={scene.alt} loading="lazy" />
+                <div>
+                  <span className="kicker">{scene.label}</span>
+                  <h2 className="display h-xl">{scene.title} <i>{scene.accent}</i></h2>
+                  <p className="lede">{scene.copy}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
-      <VelocityMarquee>Podcast · Photoshoot · Video · Sound · Animation · Podcast · Photoshoot · Video · Sound · Animation ·&nbsp;</VelocityMarquee>
+      <VelocityMarquee>Find the thread · Shape the world · Bring it to life · Make it matter · Find the thread · Shape the world · Bring it to life · Make it matter ·&nbsp;</VelocityMarquee>
 
       <section className="section">
         <div className="wrap split">
@@ -125,6 +210,8 @@ export default function Home() {
               ["01", "Podcast production", "Treated room, multi-mic setup and edited audio & video cuts.", "/services#podcast", "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=800&auto=format&fit=crop", "Podcast microphone close-up"],
               ["02", "Photoshoots", "Daylight studio for portraits, fashion, product and editorial stories.", "/services#photoshoot", "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=800&auto=format&fit=crop", "Photographer in studio with softbox"],
               ["03", "Video production", "Interviews, brand films, music visuals and social cuts — shot and finished.", "/services#video", "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=800&auto=format&fit=crop", "Video shoot with camera operator"],
+              ["04", "Sound production", "Clean recording, thoughtful sound design and post-production that gives every story its tone.", "/services#sound", "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop", "Sound mixing desk in a treated studio"],
+              ["05", "Animation", "Frame-by-frame ideas, motion graphics and visual details that make a message move.", "/services#animation", "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop", "Colourful animation workspace"],
             ].map(([idx, h, p, to, src, alt]) => (
               <Link className="svc-row" to={to} key={idx}>
                 <span className="idx">{idx}</span>
