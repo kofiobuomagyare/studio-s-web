@@ -4,6 +4,7 @@ import Reveal from "../components/Reveal.jsx";
 import { BookingLink } from "../components/Layout.jsx";
 import { Magnetic, ParticleField, VelocityMarquee, useReducedMotion, useScrollCardStack } from "../components/motion.jsx";
 import { usePageMeta } from "../hooks.js";
+import InstagramGallery from "../components/InstagramGallery.jsx";
 
 const HERO_SLIDES = [
   {
@@ -256,6 +257,19 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="section instagram-preview-section">
+        <div className="wrap">
+          <div className="instagram-preview-heading">
+            <div>
+              <span className="kicker">Selected stories</span>
+              <h2 className="display h-xl">Stories from <i>inside the house.</i></h2>
+            </div>
+            <Link className="btn btn-ghost" to="/gallery">View Gallery</Link>
+          </div>
+          <InstagramGallery preview />
         </div>
       </section>
 

@@ -761,6 +761,98 @@ body{overflow-x:clip}
   .compare-table th,.compare-table td{padding:12px 13px}
   .pricing-extra-list li{flex-direction:column;gap:2px}
 }
+/* ---------- Instagram gallery ---------- */
+.instagram-preview-heading{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  margin-bottom:22px;
+}
+.instagram-preview-heading h2{margin:10px 0 0}
+.instagram-gallery-heading{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-bottom:22px;
+}
+.instagram-gallery-heading p{margin:0}
+.instagram-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;
+}
+.instagram-grid-preview{grid-template-columns:repeat(3,minmax(0,1fr))}
+.instagram-card{
+  min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;
+  background:var(--card);box-shadow:0 12px 32px -28px rgba(22,18,14,.45);
+}
+.instagram-post-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;background:var(--paper-2);
+}
+.instagram-post-grid.single{grid-template-columns:1fr}
+.instagram-image{
+  position:relative;display:block;width:100%;aspect-ratio:1/1;overflow:hidden;
+  padding:0;border:0;background:var(--paper-2);cursor:zoom-in;text-align:left;
+}
+.instagram-image img{
+  width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease-out);
+}
+.instagram-image:hover img{transform:scale(1.045)}
+.instagram-carousel{
+  position:absolute;right:10px;top:10px;padding:3px 8px;border-radius:999px;
+  background:rgba(22,18,14,.72);color:#fff;font-size:12px;font-weight:700;
+}
+.instagram-card-copy{padding:14px 16px 16px}
+.instagram-card-copy time{color:var(--muted);font-size:12px;font-weight:600}
+.instagram-card-copy p{
+  display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:3;
+  margin:7px 0 10px;font-size:13px;line-height:1.5;overflow-wrap:anywhere;
+}
+.instagram-card-copy a,.instagram-lightbox-content a{
+  color:var(--ember-deep);font-size:13px;font-weight:700;text-decoration:none;
+}
+.instagram-card-copy a:hover,.instagram-lightbox-content a:hover{text-decoration:underline}
+.instagram-state{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;
+  min-height:150px;padding:24px;border:1px dashed var(--line);border-radius:18px;
+  background:rgba(247,243,233,.55);text-align:center;
+}
+.instagram-state p{margin:0;max-width:56ch}
+.instagram-warning,.instagram-refreshing{
+  margin:0 0 14px;padding:10px 14px;border-radius:12px;
+  background:rgba(201,162,39,.14);color:var(--ink-2);font-size:13px;
+}
+.instagram-refreshing{background:transparent;color:var(--muted);padding:0}
+.instagram-retry{
+  margin:0 0 16px;padding:0;border:0;background:none;color:var(--ember-deep);
+  font:inherit;font-size:13px;font-weight:700;text-decoration:underline;
+  text-underline-offset:3px;cursor:pointer;
+}
+.instagram-more{display:flex;justify-content:center;margin-top:28px}
+.instagram-gallery-section{padding-top:clamp(34px,5vw,58px)}
+.instagram-lightbox{
+  grid-template-columns:minmax(44px,1fr) minmax(0,900px) minmax(44px,1fr);
+  gap:12px;
+}
+.instagram-lightbox-close{position:absolute;top:18px;right:18px}
+.instagram-lightbox-prev,.instagram-lightbox-next{align-self:center;justify-self:center}
+.instagram-lightbox-content{
+  display:grid;justify-items:center;gap:12px;max-width:100%;max-height:88vh;
+  margin:0;color:#fff;text-align:center;
+}
+.instagram-lightbox-content img{
+  max-width:100%;max-height:75vh;object-fit:contain;border-radius:12px;
+}
+.instagram-lightbox-content figcaption{
+  max-width:70ch;max-height:12vh;overflow:auto;font-size:13px;white-space:pre-wrap;
+}
+.instagram-lightbox-content a{color:#FFE0D2}
+.instagram-lightbox .btn{padding:10px 14px}
+@media (max-width:980px){
+  .instagram-grid,.instagram-grid-preview{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .instagram-preview-heading,.instagram-gallery-heading{align-items:flex-start;flex-direction:column}
+  .instagram-preview-heading .btn{align-self:flex-start}
+  .instagram-grid,.instagram-grid-preview{grid-template-columns:1fr}
+  .instagram-lightbox{grid-template-columns:42px minmax(0,1fr) 42px;gap:4px;padding:12px}
+  .instagram-lightbox-close{top:12px;right:12px}
+  .instagram-lightbox-content img{max-height:68vh}
+}
 /* ---------- Podcast support promotion ---------- */
 .promo-banner{
   position:relative;z-index:61;

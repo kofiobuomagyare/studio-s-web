@@ -24,7 +24,7 @@ export default function Privacy() {
         </ul>
         <h2 className="display h-md">What we don&apos;t do</h2>
         <ul>
-          <li>No accounts, no passwords, no payment details are collected on this website.</li>
+          <li>No accounts, passwords or payment details are collected on this website.</li>
           <li>No tracking, analytics or advertising scripts run until you explicitly accept them in the consent banner — and only if analytics has been configured at all.</li>
           <li>We never sell your information or share it beyond what is needed to deliver your booking (for example, confirming crew availability).</li>
         </ul>
@@ -33,7 +33,7 @@ export default function Privacy() {
         <h2 className="display h-md">Your rights</h2>
         <p>Ask us at any time what we hold about you, or ask us to correct or delete it, via the <Link to="/contact">contact page</Link>. We will respond within a reasonable time.</p>
         <h2 className="display h-md">External links</h2>
-        <p>Booking runs on Google Forms, maps on Google Maps, and social profiles on their own platforms — each applies its own privacy terms once you leave this site.</p>
+        <p>Booking runs on Google Forms and maps on Google Maps; each applies its own privacy terms once you leave this site. The gallery may display public Instagram posts through the Instagram Graph API. Public post metadata is cached in our hosting provider&apos;s Blob store, and your browser connects to Meta&apos;s image delivery network to load Instagram-hosted photos. Meta may receive technical information such as your IP address and browser details under its <a href="https://privacycenter.instagram.com/policy/" target="_blank" rel="noopener noreferrer">privacy policy</a>. Instagram access credentials remain on our server and are not sent to your browser.</p>
       </div></section>
     </>
   );

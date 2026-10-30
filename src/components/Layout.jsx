@@ -27,6 +27,7 @@ const LINKS = [
   ["About", "/about"],
   ["Services", "/services"],
   ["Spaces", "/spaces"],
+  ["Gallery", "/gallery"],
   ["Rate Card", "/rate-card"],
   ["Booking", "/booking"],
   ["Contact", "/contact"],
@@ -99,6 +100,7 @@ export function Footer() {
           <div>
             <b>Visit</b>
             <Link to="/spaces">Studio spaces</Link>
+            <Link to="/gallery">Gallery</Link>
             <Link to="/services">Services</Link>
             <Link to="/rate-card">Rate card</Link>
             <Link to="/booking">Booking</Link>
