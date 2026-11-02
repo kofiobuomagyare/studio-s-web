@@ -23,25 +23,25 @@ export default function About() {
           <img className="float" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop" alt="Two creators reviewing work together" loading="lazy" />
         </div>
       </div></section>
-      <section className="section" style={{ background: "var(--fig-2)", color: "#F3EDDF", borderRadius: 28, margin: "0 var(--pad)" }}>
+      <section className="section dark-panel" style={{ margin: "0 var(--pad)" }}>
         <div className="wrap two-col">
           <div>
-            <span className="kicker" style={{ color: "#E8FF47" }}>Vision &amp; mission</span>
+            <span className="kicker" style={{ color: "var(--lime)" }}>Vision &amp; mission</span>
             <h2 className="display h-xl">Vision</h2>
-            <p className="lede" style={{ color: "#CFC6B4" }}>To be the address creators name first when the work matters — a distinctive creative destination, not a commodity rental.</p>
+            <p className="lede">To be the address creators name first when the work matters — a distinctive creative destination, not a commodity rental.</p>
             <h2 className="display h-xl">Mission</h2>
-            <p className="lede" style={{ color: "#CFC6B4" }}>To give every project the right room, the right tools and unhurried support — from first enquiry to final delivery.</p>
+            <p className="lede">To give every project the right room, the right tools and unhurried support — from first enquiry to final delivery.</p>
           </div>
           <div>
             <h3 className="display h-md">Creative philosophy</h3>
-            <ul className="checklist" style={{ color: "#EDE6D5" }}>
+            <ul className="checklist">
               <li>Story first, gear second — equipment serves the idea.</li>
               <li>Calm sets make brave work — we protect the atmosphere.</li>
               <li>Transparency over surprises — rates and terms in plain view.</li>
               <li>Craft is hospitality — clean rooms, clear comms, on-time days.</li>
             </ul>
-            <div className="rule" style={{ background: "rgba(255,255,255,.15)" }}></div>
-            <p className="hint" style={{ color: "#A99E88" }}>History, client logos and awards will be added here when confirmed by the studio. Nothing is invented on this page.</p>
+            <div className="rule"></div>
+            <p className="hint">History, client logos and awards will be added here when confirmed by the studio. Nothing is invented on this page.</p>
           </div>
         </div>
       </section>

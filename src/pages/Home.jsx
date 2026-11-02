@@ -65,10 +65,149 @@ const HERO_SLIDES = [
   },
 ];
 
-const GALLERY = [
-  { src: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1000&auto=format&fit=crop", alt: "Sound-treated studio with mixing desk", title: "Sound & Podcast Room", sub: "Quiet, treated, mic-ready." },
-  { src: "https://images.unsplash.com/photo-1520390138845-fd2d229dd553?q=80&w=1000&auto=format&fit=crop", alt: "Bright photo studio with backdrop", title: "Daylight Photo Studio", sub: "Soft window light + backdrop wall." },
-  { src: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop", alt: "Creative lounge and production office", title: "Creative Lounge", sub: "Prep, interviews and small gatherings." },
+const CRAFTS = [
+  {
+    n: "01",
+    tone: "lavender",
+    title: "Podcast production",
+    copy: "Treated rooms, multi-mic setups and edited audio + video cuts that sound like you.",
+    tags: ["Recording", "Editing", "Distribution"],
+    to: "/services#podcast",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="9" y="2" width="6" height="11" rx="3" />
+        <path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8" />
+      </svg>
+    ),
+  },
+  {
+    n: "02",
+    tone: "pink",
+    title: "Photography",
+    copy: "Daylight studio and location shoots for portraits, fashion, product and editorial stories.",
+    tags: ["Portrait", "Editorial", "Product"],
+    to: "/services#photoshoot",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M3 8h4l2-3h6l2 3h4v11H3z" />
+        <circle cx="12" cy="13" r="3.6" />
+      </svg>
+    ),
+  },
+  {
+    n: "03",
+    tone: "lime",
+    title: "Film & video",
+    copy: "Interviews, brand films, music visuals and social cuts — directed, shot and finished.",
+    tags: ["Direction", "Production", "Post"],
+    to: "/services#video",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="2" y="6" width="13" height="12" rx="2" />
+        <path d="M15 10l7-4v12l-7-4z" />
+      </svg>
+    ),
+  },
+  {
+    n: "04",
+    tone: "cyan",
+    title: "Sound design",
+    copy: "Clean recording, original scores and post-production that gives every story its tone.",
+    tags: ["Mixing", "Voice", "Score"],
+    to: "/services#sound",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M3 12h2M8 6v12M12 3v18M16 8v8M20 11v2" />
+      </svg>
+    ),
+  },
+  {
+    n: "05",
+    tone: "teal",
+    title: "Animation & design",
+    copy: "Motion graphics, identities and visual details that make an idea move people.",
+    tags: ["Motion", "Identity", "Graphics"],
+    to: "/services#animation",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" />
+        <circle cx="19" cy="19" r="1.6" />
+      </svg>
+    ),
+  },
+];
+
+const WORK = [
+  {
+    src: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1000&auto=format&fit=crop",
+    alt: "Sound-treated studio with mixing desk",
+    title: "Sound & Podcast Room",
+    sub: "Quiet, treated, mic-ready.",
+    tag: "Podcast",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1520390138845-fd2d229dd553?q=80&w=1000&auto=format&fit=crop",
+    alt: "Bright photo studio with backdrop",
+    title: "Daylight Photo Studio",
+    sub: "Soft window light + backdrop wall.",
+    tag: "Photo",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
+    alt: "Creative lounge and production office",
+    title: "Creative Lounge",
+    sub: "Prep, interviews and small gatherings.",
+    tag: "Space",
+  },
+];
+
+const STEPS = [
+  {
+    n: "01",
+    title: "Listen",
+    copy: "We start with the story, the audience and the feeling you want to leave behind.",
+    accent: "var(--pink)",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M4 10a8 8 0 0 1 16 0v4a4 4 0 0 1-4 4h-2" />
+        <path d="M4 11v4a2 2 0 0 0 2 2h1v-7H6a2 2 0 0 0-2 2zM20 11v4a2 2 0 0 1-2 2h-1v-7h1a2 2 0 0 1 2 2z" />
+      </svg>
+    ),
+  },
+  {
+    n: "02",
+    title: "Shape",
+    copy: "Together we choose the rooms, the crafts and the visual language that fit the idea.",
+    accent: "var(--cyan)",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z" />
+      </svg>
+    ),
+  },
+  {
+    n: "03",
+    title: "Make",
+    copy: "Cameras, mics and motion — a calm production day with a crew that cares about detail.",
+    accent: "var(--lime-deep)",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="2" y="6" width="13" height="12" rx="2" />
+        <path d="M15 10l7-4v12l-7-4z" />
+      </svg>
+    ),
+  },
+  {
+    n: "04",
+    title: "Deliver",
+    copy: "Edited, mixed and finished assets — ready for your channels, cinema or the world.",
+    accent: "var(--teal)",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {
@@ -161,6 +300,7 @@ export default function Home() {
             )}
           </figure>
           <div className="hero-copy">
+            <span className="hero-sticker hero-sticker-lime">Podcast · Photo · Film</span>
             <div className="hero-story" key={current.key}>
               <span className="kicker">Studio of Stories · Creative production house</span>
               <span className="hero-chapter">{current.chapter}</span>
@@ -198,108 +338,144 @@ export default function Home() {
 
       <VelocityMarquee>Find the thread · Shape the world · Bring it to life · Make it matter · Find the thread · Shape the world · Bring it to life · Make it matter ·&nbsp;</VelocityMarquee>
 
-      <section className="section">
-        <div className="wrap split">
-          <Reveal className="img-stack">
-            <img className="main" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop" alt="Calm studio lounge with wooden table and chairs" loading="lazy" />
-            <img className="float" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800&auto=format&fit=crop" alt="Cinema camera on set" loading="lazy" />
-          </Reveal>
-          <Reveal className="copy" delay={120}>
-            <span className="kicker">What we are</span>
-            <h2 className="display h-xl">A <i>working house</i> for people who make things.</h2>
-            <p className="lede">
-              Not a backdrop-rental warehouse. Studio S pairs considered rooms with production support — so a podcast,
-              a lookbook, a music session or a short film all get the same care: good light, good sound, good company.
-            </p>
-            <div className="tag-row">
-              <span className="tag">Podcast-ready rooms</span>
-              <span className="tag">Daylight photo studio</span>
-              <span className="tag">Video &amp; sound stages</span>
-              <span className="tag">Animation support</span>
-            </div>
-            <Link className="btn btn-ghost" to="/about">Our story &amp; philosophy</Link>
-          </Reveal>
+      <section className="manifesto" aria-labelledby="manifesto-title">
+        <span className="kicker manifesto-label">What we are</span>
+        <h2 className="manifesto-title" id="manifesto-title">
+          A <i>working house</i> for people who make things.
+          <span className="manifesto-chip">
+            <img
+              src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=600&auto=format&fit=crop"
+              alt="Calm studio lounge with wooden table and chairs"
+              loading="lazy"
+            />
+          </span>
+        </h2>
+        <div className="manifesto-body">
+          <p>
+            Not a backdrop-rental warehouse. Studio S pairs considered rooms with production support — so a podcast,
+            a lookbook, a music session or a short film all get the same care: good light, good sound, good company.
+          </p>
+          <p>
+            Five crafts under one roof, one team from first idea to final cut. That is what makes a studio feel
+            less like a hire and more like a home for your story.
+          </p>
+          <Link className="text-link" to="/about">Our story &amp; philosophy <span aria-hidden="true">↗</span></Link>
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="crafts-section" aria-labelledby="crafts-title">
         <div className="wrap">
-          <span className="kicker">Featured services</span>
-          <h2 className="display h-xl">Five crafts, <i>one address.</i></h2>
-          <div className="svc-list">
-            {[
-              ["01", "Podcast production", "Treated room, multi-mic setup and edited audio & video cuts.", "/services#podcast", "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=800&auto=format&fit=crop", "Podcast microphone close-up"],
-              ["02", "Photoshoots", "Daylight studio for portraits, fashion, product and editorial stories.", "/services#photoshoot", "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=800&auto=format&fit=crop", "Photographer in studio with softbox"],
-              ["03", "Video production", "Interviews, brand films, music visuals and social cuts — shot and finished.", "/services#video", "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=800&auto=format&fit=crop", "Video shoot with camera operator"],
-              ["04", "Sound production", "Clean recording, thoughtful sound design and post-production that gives every story its tone.", "/services#sound", "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop", "Sound mixing desk in a treated studio"],
-              ["05", "Animation", "Frame-by-frame ideas, motion graphics and visual details that make a message move.", "/services#animation", "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop", "Colourful animation workspace"],
-            ].map(([idx, h, p, to, src, alt]) => (
-              <Link className="svc-row" to={to} key={idx}>
-                <span className="idx">{idx}</span>
-                <span><h3>{h}</h3><p>{p}</p></span>
-                <img src={src} alt={alt} loading="lazy" />
-                <span className="go" aria-hidden="true">↗</span>
+          <div className="section-head">
+            <div>
+              <span className="kicker">What we do</span>
+              <h2 className="display h-xl" id="crafts-title">Five crafts, <i>one address.</i></h2>
+            </div>
+            <div className="section-head-side">
+              <p>
+                Photography and film get the time they deserve. So do sound, motion and the design that holds it
+                all together. Choose a craft — or bring us the whole story.
+              </p>
+              <Link className="text-link" to="/services">Explore all five services <span aria-hidden="true">↗</span></Link>
+            </div>
+          </div>
+          <div className="craft-grid">
+            {CRAFTS.map((c) => (
+              <Link className={`craft-card craft-${c.tone}`} to={c.to} key={c.n}>
+                <div className="craft-top">
+                  <span className="craft-num">{c.n}</span>
+                  <span className="craft-icon">{c.icon}</span>
+                </div>
+                <h3>{c.title}</h3>
+                <p>{c.copy}</p>
+                <div className="craft-tags">
+                  {c.tags.map((t) => <span key={t}>{t}</span>)}
+                </div>
+                <span className="craft-arrow" aria-hidden="true">↗</span>
               </Link>
             ))}
           </div>
-          <div style={{ marginTop: 16 }}>
-            <Link className="btn btn-ghost" to="/services">All five services</Link>
+          <div className="craft-foot">
+            <p>Need more than one craft? Most projects do. We build the team around the story, not the other way round.</p>
+            <BookingLink className="btn btn-ember">Start a project</BookingLink>
           </div>
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="work-section" aria-labelledby="work-title">
         <div className="wrap">
-          <div className="band">
-            <div className="wrap">
-              <span className="kicker" style={{ color: "#E8FF47" }}>Inside the house</span>
-              <h2 className="display h-xl">Rooms that <i style={{ color: "#E8FF47" }}>photograph well</i> and work harder.</h2>
-              <p className="lede">Three environments to choose from. Walk them visually, then check the rate card for what fits your project.</p>
-              <div className="gallery-3">
-                {GALLERY.map((g) => (
-                  <figure
-                    key={g.title}
-                    data-zoom
-                    tabIndex={0}
-                    role="button"
-                    aria-label={`Enlarge image: ${g.alt}`}
-                    onClick={() => setLightbox(g)}
-                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setLightbox(g); } }}
-                  >
-                    <img src={g.src} alt={g.alt} loading="lazy" />
-                    <figcaption><b>{g.title}</b><br />{g.sub} Select to enlarge.</figcaption>
-                  </figure>
-                ))}
-              </div>
-              <div style={{ marginTop: 20, display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <Link className="btn btn-ember" to="/spaces">Explore spaces</Link>
-                <Link className="btn btn-light" to="/rate-card">See rates</Link>
-              </div>
+          <div className="work-head">
+            <div>
+              <span className="kicker">Inside the house</span>
+              <h2 className="display" id="work-title">Rooms that <i>work harder.</i></h2>
             </div>
+            <Link className="text-link text-link-light" to="/spaces">Explore the spaces <span aria-hidden="true">↗</span></Link>
+          </div>
+          <div className="work-grid">
+            {WORK.map((w) => (
+              <button
+                className="work-card"
+                type="button"
+                key={w.title}
+                onClick={() => setLightbox(w)}
+                aria-label={`Enlarge image: ${w.alt}`}
+              >
+                <span className="work-media">
+                  <img src={w.src} alt={w.alt} loading="lazy" />
+                  <span className="work-tag">{w.tag}</span>
+                </span>
+                <span className="work-meta">
+                  <span className="work-title">{w.title}</span>
+                  <span className="work-sub">{w.sub}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+          <div className="work-foot">
+            <Link className="btn btn-ember" to="/spaces">Book a walkthrough</Link>
           </div>
         </div>
       </section>
 
-      <section className="section instagram-preview-section">
+      <section className="instagram-preview-section" aria-labelledby="stories-title">
         <div className="wrap">
           <div className="instagram-preview-heading">
             <div>
               <span className="kicker">Selected stories</span>
-              <h2 className="display h-xl">Stories from <i>inside the house.</i></h2>
+              <h2 className="display h-xl" id="stories-title">Stories from <i>inside the house.</i></h2>
             </div>
+            <a className="text-link text-link-light" href="https://www.instagram.com/studios.gh" target="_blank" rel="noopener">
+              Follow @studios.gh <span aria-hidden="true">↗</span>
+            </a>
           </div>
           <InstagramGallery preview />
         </div>
       </section>
 
-      <section className="section">
+      <section className="stats-section" id="stats" aria-label="Studio at a glance">
+        <div className="wrap stats-grid">
+          {[
+            ["05", "Creative crafts", "var(--pink)"],
+            ["03", "Shoot-ready rooms", "var(--cyan)"],
+            ["120+", "Stories produced", "var(--lime-deep)"],
+            ["01", "Team, end to end", "var(--teal)"],
+          ].map(([value, label, dot]) => (
+            <div className="stat" key={label} style={{ "--dot": dot }}>
+              <i aria-hidden="true" />
+              <b>{value}</b>
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="pricing-preview" id="pricing" aria-labelledby="pricing-title">
         <div className="wrap">
           <span className="kicker">Pricing, plainly</span>
-          <h2 className="display h-lg">Start with the shape of <i>pricing.</i></h2>
+          <h2 className="display h-lg" id="pricing-title">Start with the shape of <i>pricing.</i></h2>
           <p className="lede">Real package prices from the studio&apos;s rate card — these are the rental shapes clients use most.</p>
           <div className="rate-grid">
             <div className="rate-card"><h3>Hourly</h3><p className="mut">For short podcast records, voiceovers and quick shoots.</p><p className="price"><b>From GH₵350</b> <small>/ hour · Starter package</small></p><Link to="/rate-card#visual">Details</Link></div>
-            <div className="rate-card featured"><h3>Half / Full day</h3><p className="mut">For shoots and productions that need setup + wrap.</p><p className="price"><b>From GH₵1,150</b> <small>/ session · Standard 4-hour</small></p><Link to="/rate-card#sessions" style={{ color: "#fff" }}>Details</Link></div>
+            <div className="rate-card featured"><h3>Half / Full day</h3><p className="mut">For shoots and productions that need setup + wrap.</p><p className="price"><b>From GH₵1,150</b> <small>/ session · Standard 4-hour</small></p><Link to="/rate-card#sessions">Details</Link></div>
             <div className="rate-card"><h3>Project</h3><p className="mut">Post-production, streaming and animation — scoped per brief.</p><p className="price"><b>From GH₵700</b> <small>/ project · Basic edit</small></p><Link to="/rate-card#projects">Details</Link></div>
           </div>
           <div style={{ marginTop: 18, display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -308,22 +484,38 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="process-section" id="process" aria-labelledby="process-title">
         <div className="wrap">
-          <span className="kicker">Booking in brief</span>
-          <h2 className="display h-lg">From idea to <i>confirmed date</i> in five moves.</h2>
-          <div className="steps">
-            {[["1", "Explore", "Spaces & services."], ["2", "Check rates", "Find your shape."], ["3", "Prepare", "Date, time, crew size."], ["4", "Request", "Via Google Form."], ["5", "Confirm", "We reply & lock in."]].map(([n, h, p]) => (
-              <div className="step" key={n}><b className="step-n">{n}</b><h4>{h}</h4><p>{p}</p></div>
+          <div className="process-head">
+            <div>
+              <span className="kicker">How it works</span>
+              <h2 className="display h-lg" id="process-title">From first idea to <i>final cut.</i></h2>
+            </div>
+            <p>Four clear moves. No mystery, no runaway timelines — just a studio that knows how to take an idea seriously.</p>
+          </div>
+          <div className="process-grid">
+            {STEPS.map((s) => (
+              <div className="process-step" key={s.n}>
+                <span className="process-num">{s.n}</span>
+                <div className="process-icon" style={{ "--accent": s.accent }}>{s.icon}</div>
+                <h3>{s.title}</h3>
+                <p>{s.copy}</p>
+              </div>
             ))}
           </div>
-          <div style={{ marginTop: 18 }}>
+          <div className="process-thread" aria-hidden="true">
+            <i style={{ left: "12%", background: "var(--pink)" }} />
+            <i style={{ left: "37%", background: "var(--cyan)" }} />
+            <i style={{ left: "62%", background: "var(--lime)" }} />
+            <i style={{ left: "87%", background: "var(--teal)" }} />
+          </div>
+          <div style={{ marginTop: 22 }}>
             <Link className="btn btn-ghost" to="/booking">How booking works</Link>
           </div>
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="cta-section">
         <div className="wrap">
           <Reveal className="cta-panel">
             <ParticleField />

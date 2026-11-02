@@ -289,7 +289,7 @@ export function ParticleField({ max = 56, className = "" }) {
     let w = 0, h = 0, raf = 0, visible = true;
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const rnd = (a, b) => a + Math.random() * (b - a);
-    const TONES = ["255, 232, 200", "255, 204, 164", "255, 244, 230"];
+    const TONES = ["30, 15, 35", "181, 16, 127", "0, 120, 126"];
     let parts = [];
     const seed = () => {
       const n = Math.max(18, Math.min(max, Math.floor(w / 26)));

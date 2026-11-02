@@ -92,6 +92,11 @@ export function Header() {
             {label}
           </NavLink>
         ))}
+        <div className="mobile-cta">
+          <BookingLink className="btn btn-ember" onClick={() => setOpen(false)}>
+            Request a Booking
+          </BookingLink>
+        </div>
       </nav>
     </header>
   );
@@ -117,13 +122,13 @@ export function Footer() {
               />
               <b>Studio S</b>
             </Link>
-            <p style={{ color: "#A99E88", fontSize: 14 }}>
+            <p className="foot-blurb">
               Studio of Stories — rooms &amp; production for podcasts,
               photoshoots, video, sound and animation.
             </p>
             <p>
               <BookingLink className="" to="/booking">
-                <strong style={{ color: "#fff" }}>Request a Booking</strong>
+                <strong className="foot-cta">Request a Booking</strong>
               </BookingLink>
             </p>
           </div>
