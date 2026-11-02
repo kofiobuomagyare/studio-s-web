@@ -595,11 +595,11 @@ export default function RateCard() {
           <span className="kicker">Pricing — transparent by design</span>
           <h1 className="display pricing-title" id="pricing-title">One rate card, <i>no riddles.</i></h1>
           <p className="lede pricing-lede">
-            Every price below comes from the official Studio S 2025 packages brochure, in Ghana cedis (GH₵).
+            Every price below comes from the official Studio S packages brochure, in Ghana cedis (GH₵).
             Pick a category, compare packages, then request your date — submitting a request never auto-confirms a booking.
           </p>
           <div className="pricing-trust">
-            <span><b aria-hidden="true">✓</b> Official 2025 packages</span>
+            <span><b aria-hidden="true">✓</b> Official packages</span>
             <span><b aria-hidden="true">✓</b> Prices in Ghana cedis</span>
             <span><b aria-hidden="true">✓</b> Requests never auto-confirm</span>
           </div>

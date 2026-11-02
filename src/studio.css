@@ -804,6 +804,49 @@ input.fl:focus,select.fl:focus,textarea.fl:focus{border-color:var(--pink-deep);o
 .rate-table th{background:var(--paper-2)}
 .rate-table tr:target{background:var(--lime-tint)}
 
+.req{color:var(--pink-deep);font-weight:800;margin-left:2px}
+.btn:disabled,.btn[aria-busy="true"]{opacity:.6;cursor:not-allowed;transform:none;box-shadow:1px 1px 0 var(--ink)}
+.btn:disabled:hover,.btn[aria-busy="true"]:hover{transform:none;box-shadow:1px 1px 0 var(--ink)}
+
+/* --------------------------------------------------------------------------
+   Contact page
+   -------------------------------------------------------------------------- */
+.contact-info-card,.contact-form-card,.contact-visit-card{
+  display:grid;gap:0;padding:clamp(20px,2.5vw,32px);
+  align-content:start;
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  box-shadow:0 18px 40px -28px rgba(30,15,35,.22);
+}
+.contact-form-card{align-self:start}
+.contact-block{display:grid;gap:8px}
+.contact-block + .rule{margin:16px 0}
+.contact-block h2,.contact-block h3{margin:0 0 4px}
+.contact-form-card h2{margin:0 0 4px}
+.contact-form-card > p.mut{margin:0 0 14px}
+.contact-form{display:grid;gap:14px;margin-top:4px;align-content:start}
+.form-field{display:grid;gap:5px}
+.form-field .fl{margin:0}
+.form-field label.fl{
+  font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);
+}
+.form-field input.fl,.form-field textarea.fl{
+  padding:11px 14px;border-radius:12px;border:1px solid var(--line-strong);
+  background:var(--paper);color:var(--ink);font-size:15px;
+  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.form-field input.fl::placeholder,.form-field textarea.fl::placeholder{color:rgba(109,90,116,.55)}
+.form-field input.fl:focus,.form-field textarea.fl:focus{
+  border-color:var(--pink-deep);background:#fff;
+  outline:none;box-shadow:0 0 0 3px rgba(181,16,127,.18);
+}
+.form-actions{display:grid;gap:10px;margin-top:4px;justify-items:start;align-content:start}
+.form-actions .btn{width:auto;justify-content:center;align-self:start}
+.form-actions .hint{margin:0;font-size:12.5px}
+@media (max-width:620px){
+  .form-actions .btn{width:100%}
+}
+
 /* --------------------------------------------------------------------------
    About / dark panel
    -------------------------------------------------------------------------- */

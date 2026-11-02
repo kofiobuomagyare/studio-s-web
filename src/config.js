@@ -6,4 +6,6 @@ export const STUDIO_S_CONFIG = {
   phone: "0302 810 641",
   instagramUrl: "https://instagram.com/studio_s.gh",
   tiktokUrl: "https://www.tiktok.com/@studio.sgh",
+  studioAddress: "Studio S, Smartline Publishers Ltd, Tema, Ghana",
+  studioCoords: { lat: 5.6370483, lng: -0.0995895 },
 };
