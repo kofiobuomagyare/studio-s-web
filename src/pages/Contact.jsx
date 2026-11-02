@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { BookingLink } from "../components/Layout.jsx";
 import { STUDIO_S_CONFIG } from "../config.js";
@@ -7,15 +7,45 @@ import { usePageMeta } from "../hooks.js";
 export default function Contact() {
   usePageMeta("Contact — Studio S", "Contact Studio S: enquiries, location, socials and booking shortcut.");
   const [formError, setFormError] = useState("");
+  const [subject, setSubject] = useState("");
+  const [customSubject, setCustomSubject] = useState("");
+  const nameRef = useRef(null);
+  const projectRef = useRef(null);
+
   const handleEnquiry = (e) => {
-    // Honeypot: bots fill it, humans never see it.
-    if (e.currentTarget.querySelector(".hp-field input")?.value) {
-      e.preventDefault();
+    e.preventDefault();
+    const honeypot = e.currentTarget.querySelector(".hp-field input")?.value;
+    if (honeypot) {
       setFormError("Something about that submission looked automated — please email us directly instead.");
+      return;
     }
+    const name = nameRef.current?.value?.trim() || "";
+    const project = projectRef.current?.value?.trim() || "";
+    const finalSubject = subject === "Other" ? customSubject.trim() : subject;
+    if (!finalSubject) {
+      setFormError("Please choose a subject for your enquiry.");
+      return;
+    }
+    setFormError("");
+    const body = `Name: ${name}\n\n${project}`;
+    const mailto = `mailto:${STUDIO_S_CONFIG.email}?subject=${encodeURIComponent(finalSubject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
   };
 
   const hasLocation = Boolean(STUDIO_S_CONFIG.studioAddress);
+
+  const SUBJECT_OPTIONS = [
+    "General enquiry",
+    "Booking a studio session",
+    "Podcast production",
+    "Photography / photoshoot",
+    "Video production",
+    "Sound design",
+    "Animation & motion graphics",
+    "Pricing & packages",
+    "Studio tour / visit",
+    "Other (specify)",
+  ];
 
   return (
     <>
@@ -30,14 +60,42 @@ export default function Contact() {
         <div className="card contact-form-card contact-form-full">
           <h2 className="display h-md">Send an enquiry</h2>
           <p className="mut">We reply within one business day. Tell us what you&apos;re making and we&apos;ll come back with availability and next steps.</p>
-          <form className="contact-form" action={`mailto:${STUDIO_S_CONFIG.email}`} method="get" encType="text/plain" onSubmit={handleEnquiry}>
+          <form className="contact-form" onSubmit={handleEnquiry} noValidate>
+            <div className="form-field">
+              <label className="fl" htmlFor="subject">Subject <span className="req" aria-hidden="true">*</span></label>
+              <select
+                className="fl"
+                id="subject"
+                required
+                aria-required="true"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              >
+                <option value="" disabled>Choose a topic…</option>
+                {SUBJECT_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+              {subject === "Other (specify)" && (
+                <input
+                  className="fl"
+                  type="text"
+                  required
+                  aria-required="true"
+                  placeholder="e.g. Partnership idea, press enquiry…"
+                  value={customSubject}
+                  onChange={(e) => setCustomSubject(e.target.value)}
+                  style={{ marginTop: 8 }}
+                />
+              )}
+            </div>
             <div className="form-field">
               <label className="fl" htmlFor="n">Your name <span className="req" aria-hidden="true">*</span></label>
-              <input className="fl" id="n" name="subject" required aria-required="true" autoComplete="name" placeholder="e.g. Theodosia Okoh" />
+              <input className="fl" id="n" ref={nameRef} required aria-required="true" autoComplete="name" placeholder="e.g. Theodosia Okoh" />
             </div>
             <div className="form-field">
               <label className="fl" htmlFor="m">Tell us about your project <span className="req" aria-hidden="true">*</span></label>
-              <textarea className="fl" id="m" name="body" rows={5} required aria-required="true" placeholder="What are you making, when, and for whom? e.g. A 6-episode podcast series, recording Saturdays in March." />
+              <textarea className="fl" id="m" ref={projectRef} rows={5} required aria-required="true" placeholder="What are you making, when, and for whom? e.g. A 6-episode podcast series, recording Saturdays in March." />
             </div>
             <span className="hp-field" aria-hidden="true">
               <label>Company (leave blank)<input type="text" name="company" tabIndex={-1} autoComplete="off" /></label>
