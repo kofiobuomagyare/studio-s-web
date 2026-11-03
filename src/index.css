@@ -258,7 +258,6 @@ main a:where(:not(.btn):not(.brand):not(.svc-row):not(.instagram-image)):hover{c
 .hero-scroll .hero-media{min-height:0;height:100%;overflow:hidden}
 .hero-scroll .hero-slide{transition:none}
 .hero-scroll .hero-tag{z-index:2002}
-.hero-scroll .hero-copy{overflow:hidden}
 .hero-walkmeter{
   display:none;position:absolute;left:14px;right:14px;bottom:18px;z-index:2002;
   align-items:center;gap:12px;pointer-events:none;color:rgba(255,255,255,.94);
