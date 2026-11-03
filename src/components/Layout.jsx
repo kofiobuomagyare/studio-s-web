@@ -138,7 +138,7 @@ export function Header() {
           </NavLink>
         ))}
         <div className="mobile-cta">
-          <BookingLink className="btn btn-ember" aria-label="Request a booking">
+          <BookingLink className="btn btn-ember" aria-label="Request a booking. Opens in a new tab" to="/booking">
             Request a booking <span aria-hidden="true">↗</span>
           </BookingLink>
         </div>
