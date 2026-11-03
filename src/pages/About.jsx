@@ -18,9 +18,28 @@ export default function About() {
           <p>Today Studio S hosts podcasts, photoshoots, video, sound and animation work. Some clients rent a room and run it themselves; others hand us the whole story from first shot to final cut.</p>
           <blockquote className="story">“A studio should <i>disappear</i> — so the story can appear.”</blockquote>
         </div>
-        <div className="img-stack">
-          <img className="main" src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=1200&auto=format&fit=crop" alt="Studio S working space with desks and warm light" loading="lazy" />
-          <img className="float" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop" alt="Two creators reviewing work together" loading="lazy" />
+        <div className="about-media">
+          <div className="img-stack about-img-stack">
+            <img
+              className="main"
+              src="/images/studio/studio-overview.jpg"
+              alt="Studio S image from the official rate card"
+              width="850"
+              height="1200"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              className="float"
+              src="/images/studio/studio-rental.jpg"
+              alt="Studio S image from the official rate card"
+              width="846"
+              height="1200"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <p className="media-note">Photography on this page comes from the official Studio S rate card.</p>
         </div>
       </div></section>
       <section className="section dark-panel" style={{ margin: "0 var(--pad)" }}>
@@ -41,7 +60,7 @@ export default function About() {
               <li>Craft is hospitality — clean rooms, clear comms, on-time days.</li>
             </ul>
             <div className="rule"></div>
-            <p className="hint">History, client logos and awards will be added here when confirmed by the studio. Nothing is invented on this page.</p>
+            <p className="hint">Every project starts with a conversation about the story, the audience and the room it needs.</p>
           </div>
         </div>
       </section>

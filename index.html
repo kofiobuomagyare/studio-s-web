@@ -7,30 +7,41 @@
     <meta name="description" content="Studio S (Studio of Stories) is a creative studio in Tema, Ghana for podcasts, photoshoots, video, sound, animation and live streaming. Explore packages, rates and booking." />
     <meta name="theme-color" content="#F5F1E8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Fonts: preconnected link tags (faster than CSS @import) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="canonical" href="https://studio-s-web.vercel.app/" />
+    <!-- Self-hosted fonts: no third-party font CSS, and no layout shift from
+         a late webfont swap on the display face. -->
+    <link rel="preload" href="/fonts/archivo-latin-var.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/space-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
-    <!-- Social sharing defaults (per-page title/description are set at runtime;
-         replace og:image with an absolute production URL before launch) -->
+    <meta name="color-scheme" content="light" />
+    <!-- Social sharing defaults (per-page title/description are set at runtime). -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Studio S — Studio of Stories" />
     <meta property="og:title" content="Studio S — Studio of Stories | Podcast, Photo, Video, Sound & Animation" />
     <meta property="og:description" content="Rooms and production in Tema, Ghana for podcasts, photoshoots, video, sound, animation and live streaming." />
-    <meta property="og:image" content="og-cover.jpg" />
+    <meta property="og:url" content="https://studio-s-web.vercel.app/" />
+    <meta property="og:image" content="https://studio-s-web.vercel.app/og-cover.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Studio S — Studio of Stories brand cover" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Studio S — Studio of Stories" />
     <meta name="twitter:description" content="Rooms and production in Tema, Ghana for podcasts, photoshoots, video, sound, animation and live streaming." />
-    <meta name="twitter:image" content="og-cover.jpg" />
+    <meta name="twitter:image" content="https://studio-s-web.vercel.app/og-cover.jpg" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
       "name": "Studio S — Studio of Stories",
+      "url": "https://studio-s-web.vercel.app/",
+      "image": "https://studio-s-web.vercel.app/og-cover.jpg",
       "description": "Creative studio for podcast, photoshoot, video, sound, animation and live-streaming production in Tema, Ghana.",
       "email": "studios@smartlinepublishers.com",
       "telephone": "+233302810641",
+      "sameAs": [
+        "https://instagram.com/studio_s.gh",
+        "https://www.tiktok.com/@studio.sgh"
+      ],
       "address": {
         "@type": "PostalAddress",
         "name": "Smartline Publishers Ltd",

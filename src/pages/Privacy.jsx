@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { STUDIO_S_CONFIG } from "../config.js";
 import { usePageMeta } from "../hooks.js";
 
 export default function Privacy() {
@@ -6,20 +7,21 @@ export default function Privacy() {
     "Privacy Policy — Studio S",
     "How Studio S collects, uses and protects your information when you enquire or request a booking."
   );
+  const email = STUDIO_S_CONFIG.email;
   return (
     <>
       <div className="page-hero"><div className="page-hero-inner">
         <p className="crumb"><Link to="/">Home</Link> / Privacy Policy</p>
         <span className="kicker">Your information</span>
         <h1 className="display h-giant">Privacy, <i>plainly stated.</i></h1>
-        <p className="lede">This website collects as little as possible, and only what is needed to answer enquiries and arrange bookings. Have this policy reviewed by legal counsel before relying on it.</p>
+        <p className="lede">This website collects as little as possible, and only what is needed to answer enquiries and arrange bookings.</p>
       </div></div>
       <section className="section"><div className="wrap prose">
-        <p className="hint">Last updated: October 2026.</p>
+        <p className="hint">Last updated: November 2026.</p>
         <h2 className="display h-md">What we collect</h2>
         <ul>
           <li><b>Booking requests:</b> when you submit the official Google Form, Google collects your name, contact details, preferred dates and project brief on our behalf. That data is governed by Google&apos;s privacy terms as well as this policy.</li>
-          <li><b>Email enquiries:</b> anything you choose to send to studios@smartlinepublishers.com.</li>
+          <li><b>Email enquiries:</b> anything you choose to send to <a href={`mailto:${email}`}>{email}</a> through your own email app.</li>
           <li><b>Consent choice:</b> whether you accepted or declined tracking is stored in a <code>studio-s-consent</code> cookie on your own device (Secure, SameSite=Lax, host-only, up to 6 months) — it is never sent to us or any third party.</li>
         </ul>
         <h2 className="display h-md">What we don&apos;t do</h2>
@@ -32,8 +34,8 @@ export default function Privacy() {
         <p>To reply to enquiries, check availability, prepare quotes, confirm bookings and improve our services. We keep enquiry records only as long as needed for these purposes.</p>
         <h2 className="display h-md">Your rights</h2>
         <p>Ask us at any time what we hold about you, or ask us to correct or delete it, via the <Link to="/contact">contact page</Link>. We will respond within a reasonable time.</p>
-        <h2 className="display h-md">External links</h2>
-        <p>Booking runs on Google Forms and maps on Google Maps; each applies its own privacy terms once you leave this site. The gallery may display public Instagram posts through the Instagram Graph API. Public post metadata is cached in our hosting provider&apos;s Blob store, and your browser connects to Meta&apos;s image delivery network to load Instagram-hosted photos. Meta may receive technical information such as your IP address and browser details under its <a href="https://privacycenter.instagram.com/policy/" target="_blank" rel="noopener noreferrer">privacy policy</a>. Instagram access credentials remain on our server and are not sent to your browser.</p>
+        <h2 className="display h-md">External links and third parties</h2>
+        <p>Booking runs on Google Forms and maps on Google Maps; each applies its own privacy terms once you leave this site. The interactive map on the contact page only loads after you choose to load it. Fonts are self-hosted, and the gallery may display public Instagram posts through the Instagram Graph API. Public post metadata is cached in our hosting provider&apos;s Blob store, and your browser connects to Meta&apos;s image delivery network to load Instagram-hosted photos. Meta may receive technical information such as your IP address and browser details under its <a href="https://privacycenter.instagram.com/policy/" target="_blank" rel="noopener noreferrer">privacy policy</a>. Instagram access credentials remain on our server and are not sent to your browser. Editorial photography on the site may be served from Unsplash; loading it connects your browser to Unsplash&apos;s network.</p>
       </div></section>
     </>
   );

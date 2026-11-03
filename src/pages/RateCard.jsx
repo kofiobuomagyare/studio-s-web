@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BookingLink } from "../components/Layout.jsx";
 import { usePageMeta } from "../hooks.js";
@@ -528,16 +528,27 @@ export default function RateCard() {
   );
   const [tab, setTab] = useState("all");
   const [compareTab, setCompareTab] = useState("visual");
+  const [mobileComparePlan, setMobileComparePlan] = useState(null);
+  const [scrollToPanel, setScrollToPanel] = useState(false);
   const { hash } = useLocation();
   const navigate = useNavigate();
   const compareRef = useRef(null);
   const tabRefs = useRef([]);
+  const pricingTabsRef = useRef(null);
+  const pricingPanelRef = useRef(null);
 
   const visiblePlans = PLANS.filter((plan) => tab === "all" || plan.category === tab);
   const activeCategory = CATEGORIES.find((cat) => cat.id === tab);
   const compareCategory = CATEGORIES.find((cat) => cat.id === compareTab) || CATEGORIES[1];
   const comparePlans = PLANS.filter((plan) => plan.category === compareCategory.id);
   const compareRows = COMPARE_ROWS[compareCategory.id];
+
+  useEffect(() => {
+    if (!comparePlans.some((plan) => plan.id === mobileComparePlan)) {
+      setMobileComparePlan(comparePlans[0]?.id ?? null);
+    }
+  }, [comparePlans, mobileComparePlan]);
+  const mobileCompareSelected = comparePlans.find((plan) => plan.id === mobileComparePlan) || comparePlans[0];
 
   useEffect(() => {
     const category = HASH_CATEGORY[hash.slice(1)];
@@ -557,10 +568,25 @@ export default function RateCard() {
   }, [hash, tab]);
 
   const chooseTab = (name) => {
+    const panel = pricingPanelRef.current;
+    if (panel) {
+      const rect = panel.getBoundingClientRect();
+      if (rect.top < 96) setScrollToPanel(true);
+    }
     setTab(name);
     if (name !== "all") setCompareTab(name);
     if (hash) navigate("/rate-card", { replace: true });
   };
+
+  useEffect(() => {
+    if (!scrollToPanel) return;
+    setScrollToPanel(false);
+    const panel = pricingPanelRef.current;
+    if (!panel) return;
+    const top = panel.getBoundingClientRect().top + window.scrollY;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: Math.max(0, top - 100), behavior: calm ? "auto" : "smooth" });
+  }, [tab, scrollToPanel]);
 
   const onTabKeyDown = (event, index) => {
     const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
@@ -618,7 +644,7 @@ export default function RateCard() {
             </p>
           </div>
 
-          <div className="tabs pricing-tabs" role="tablist" aria-label="Filter pricing categories">
+          <div className="tabs pricing-tabs" role="tablist" aria-label="Filter pricing categories" ref={pricingTabsRef}>
             {TABS.map(([name, label], index) => (
               <button
                 key={name}
@@ -640,6 +666,7 @@ export default function RateCard() {
 
           <div
             id="pricing-panel"
+            ref={pricingPanelRef}
             role="tabpanel"
             aria-labelledby={`pricing-tab-${tab}`}
             tabIndex={0}
@@ -660,7 +687,7 @@ export default function RateCard() {
                     </div>
                     <span className="plan-group-count">{plans.length} packages</span>
                   </header>
-                  <div className="plan-grid">
+                  <div className="plan-grid" style={{ "--plan-cols": Math.min(plans.length, 4) }}>
                     {plans.map((plan) => <PlanCard plan={plan} key={plan.id} />)}
                   </div>
                   {cat.note && <p className="hint plan-group-note">{cat.note}</p>}
@@ -751,6 +778,31 @@ export default function RateCard() {
               </table>
             </div>
           </div>
+          <div className="compare-mobile">
+            <label className="compare-mobile-label" htmlFor="compare-plan">Compare a package</label>
+            <select
+              id="compare-plan"
+              className="compare-mobile-select"
+              value={mobileComparePlan ?? ""}
+              onChange={(event) => setMobileComparePlan(event.target.value)}
+            >
+              {comparePlans.map((plan) => (
+                <option key={plan.id} value={plan.id}>
+                  {plan.name} — {formatPrice(plan.price)}
+                </option>
+              ))}
+            </select>
+            {mobileCompareSelected && (
+              <dl className="compare-mobile-list">
+                {compareRows.map(([label, key]) => (
+                  <div className="compare-mobile-row" key={key}>
+                    <dt>{label}</dt>
+                    <dd>{renderCompareValue(mobileCompareSelected.compare[key])}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
           <p className="hint compare-swipe">Swipe or use the arrows to see every plan →</p>
           <p className="hint compare-footnote">
             All prices in Ghana cedis (GH₵) and match the cards above. Extra hours and add-ons are charged only with your agreement.
@@ -780,12 +832,12 @@ export default function RateCard() {
               </div>
             </details>
             <details>
-              <summary>Booking conditions (to be confirmed)</summary>
+              <summary>Booking conditions</summary>
               <div className="body">
                 <ul>
                   <li>Requests are not confirmations — every date is confirmed in writing.</li>
-                  <li>Deposits, cancellation windows and rescheduling fees: <span className="tbd">TBC</span>.</li>
-                  <li>Set-up / wrap buffers, access times and house rules: <span className="tbd">TBC</span>.</li>
+                  <li>Deposits, cancellation windows and rescheduling terms are confirmed in writing before each booking.</li>
+                  <li>Set-up, wrap buffers, access times and house rules are agreed before the clock runs.</li>
                 </ul>
               </div>
             </details>

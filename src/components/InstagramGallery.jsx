@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import BRAND_IMAGE_ARCHIVE from "../instagramArchive.js";
+import { useDialogFocusTrap } from "../hooks.js";
 
 async function fetchInstagramFeed(signal) {
   const response = await fetch("/api/instagram-feed", { signal, headers: { Accept: "application/json" } });
@@ -31,13 +32,13 @@ export default function InstagramGallery({ preview = false }) {
   const [syncUnavailable, setSyncUnavailable] = useState(false);
   const [carouselPosition, setCarouselPosition] = useState({ page: 1, pages: 1, canPrevious: false, canNext: false });
   const [isDragging, setIsDragging] = useState(false);
+  const [filter, setFilter] = useState("all");
   const hasLoadedFeed = useRef(false);
   const carouselRef = useRef(null);
   const dragRef = useRef(null);
   const draggedRef = useRef(false);
   const closeButtonRef = useRef(null);
-  const previousFocusRef = useRef(null);
-  const lightboxWasOpenRef = useRef(false);
+  const lightboxRef = useRef(null);
 
   const showArchive = useCallback((message) => {
     hasLoadedFeed.current = true;
@@ -83,8 +84,21 @@ export default function InstagramGallery({ preview = false }) {
     () => posts.flatMap((post) => (post.images ?? []).map((image) => ({ ...image, post }))),
     [posts]
   );
-  const shownPosts = preview ? posts.slice(0, 6) : posts.slice(0, visibleCount);
+  const livePosts = useMemo(() => posts.filter((post) => !post.archive), [posts]);
+  const archivePosts = useMemo(() => posts.filter((post) => post.archive), [posts]);
+  const filteredPosts = useMemo(() => {
+    if (preview) return posts;
+    if (filter === "live") return livePosts;
+    if (filter === "archive") return archivePosts;
+    return posts;
+  }, [archivePosts, filter, livePosts, posts, preview]);
+  const filteredImages = useMemo(
+    () => filteredPosts.flatMap((post) => (post.images ?? []).map((image) => ({ ...image, post }))),
+    [filteredPosts]
+  );
+  const shownPosts = preview ? posts.slice(0, 6) : filteredPosts.slice(0, visibleCount);
   const previewImages = preview ? images.slice(0, 12) : [];
+  const displayImages = preview ? previewImages : filteredImages;
   const isLightboxOpen = lightbox !== null;
 
   function closeLightbox() {
@@ -135,31 +149,20 @@ export default function InstagramGallery({ preview = false }) {
     window.setTimeout(() => { draggedRef.current = false; }, 0);
   }
 
-  useEffect(() => {
-    if (!isLightboxOpen) {
-      if (lightboxWasOpenRef.current && previousFocusRef.current instanceof HTMLElement && previousFocusRef.current.isConnected) {
-        previousFocusRef.current.focus();
-        previousFocusRef.current = null;
+  useDialogFocusTrap({
+    open: isLightboxOpen,
+    onClose: closeLightbox,
+    dialogRef: lightboxRef,
+    initialFocusRef: closeButtonRef,
+    onKeyDown: (event) => {
+      if (event.key === "ArrowRight" && displayImages.length > 1) {
+        setLightbox((current) => (current + 1) % displayImages.length);
       }
-      lightboxWasOpenRef.current = false;
-      return undefined;
-    }
-    lightboxWasOpenRef.current = true;
-    previousFocusRef.current = document.activeElement;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeButtonRef.current?.focus();
-    const onKeyDown = (event) => {
-      if (event.key === "Escape") closeLightbox();
-      if (event.key === "ArrowRight") setLightbox((current) => (current + 1) % images.length);
-      if (event.key === "ArrowLeft") setLightbox((current) => (current - 1 + images.length) % images.length);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [isLightboxOpen, images.length]);
+      if (event.key === "ArrowLeft" && displayImages.length > 1) {
+        setLightbox((current) => (current - 1 + displayImages.length) % displayImages.length);
+      }
+    },
+  });
 
   useEffect(() => {
     if (!preview) return undefined;
@@ -262,7 +265,7 @@ export default function InstagramGallery({ preview = false }) {
                   onClick={() => setLightbox(index)}
                   aria-label={`Preview selected Studio S photo: ${image.alt || image.post.caption?.slice(0, 80) || "Studio S image"}`}
                 >
-                  <img src={image.src} alt={image.alt || image.post.caption?.slice(0, 140) || "Studio S image"} loading="lazy" decoding="async" />
+                  <img src={image.src} alt={image.alt || image.post.caption?.slice(0, 140) || "Studio S image"} width="1080" height="1080" loading="lazy" decoding="async" />
                 </button>
                 <div className="instagram-card-copy">
                   {image.post.timestamp && <time dateTime={image.post.timestamp}>{formatDate(image.post.timestamp)}</time>}
@@ -276,11 +279,24 @@ export default function InstagramGallery({ preview = false }) {
         </div>
       ) : (
       <>
+      {!preview && livePosts.length > 0 && archivePosts.length > 0 && (
+        <div className="instagram-filters" role="group" aria-label="Filter gallery stories">
+          <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>
+            All stories ({posts.length})
+          </button>
+          <button type="button" aria-pressed={filter === "live"} onClick={() => setFilter("live")}>
+            Instagram ({livePosts.length})
+          </button>
+          <button type="button" aria-pressed={filter === "archive"} onClick={() => setFilter("archive")}>
+            Archive · Pa Gya! 10 ({archivePosts.length})
+          </button>
+        </div>
+      )}
       <div className="instagram-grid">
         {shownPosts.map((post) => (
           <article className="instagram-card" key={post.id}>
             <div className={`instagram-post-grid${post.images.length === 1 ? " single" : ""}`}>
-              {post.images.map(({ id, src }, imageIndex) => {
+              {post.images.map(({ id, src, alt }, imageIndex) => {
                 const lightboxIndex = images.findIndex((image) => image.id === id);
                 return (
                   <button
@@ -290,7 +306,8 @@ export default function InstagramGallery({ preview = false }) {
                     onClick={() => setLightbox(lightboxIndex)}
                     aria-label={`${post.permalink ? `Preview image ${imageIndex + 1} of Instagram post` : "Preview selected Studio S photo"}${post.caption ? `: ${post.caption.slice(0, 80)}` : ""}`}
                   >
-                    <img src={src} alt={post.caption?.slice(0, 140) || "Studio S Instagram post"} loading="lazy" decoding="async" />
+                    <img src={src} alt={alt || post.caption?.slice(0, 140) || "Studio S image"} width="853" height="1280" loading="lazy" decoding="async" />
+                    {post.archive && <span className="instagram-archive-badge">{post.collection}</span>}
                     {imageIndex === 0 && post.images.length > 1 && (
                       <span className="instagram-carousel" aria-label={`${post.images.length} images in this post`}>▧ {post.images.length}</span>
                     )}
@@ -315,8 +332,9 @@ export default function InstagramGallery({ preview = false }) {
       )}
       </>
       )}
-      {lightbox !== null && images[lightbox] && createPortal(
+      {lightbox !== null && displayImages[lightbox] && createPortal(
         <div
+          ref={lightboxRef}
           className="lightbox open instagram-lightbox"
           role="dialog"
           aria-modal="true"
@@ -324,25 +342,25 @@ export default function InstagramGallery({ preview = false }) {
           onClick={closeLightbox}
         >
           <button ref={closeButtonRef} className="btn btn-sm lightbox-control instagram-lightbox-close" type="button" onClick={closeLightbox}>Close ×</button>
-          {images.length > 1 && (
+          {displayImages.length > 1 && (
             <button
               className="btn btn-sm lightbox-control instagram-lightbox-prev"
               type="button"
               aria-label="Previous image"
-              onClick={(event) => { event.stopPropagation(); setLightbox((lightbox - 1 + images.length) % images.length); }}
+              onClick={(event) => { event.stopPropagation(); setLightbox((lightbox - 1 + displayImages.length) % displayImages.length); }}
             >←</button>
           )}
           <figure className="instagram-lightbox-content" onClick={(event) => event.stopPropagation()}>
-            <img src={images[lightbox].src} alt={images[lightbox].alt || images[lightbox].post.caption?.slice(0, 140) || "Studio S Instagram post"} />
-            {images[lightbox].post.caption && <figcaption>{images[lightbox].post.caption}</figcaption>}
-            {images[lightbox].post.permalink && <a href={images[lightbox].post.permalink} target="_blank" rel="noopener noreferrer">View original post on Instagram ↗</a>}
+            <img src={displayImages[lightbox].src} alt={displayImages[lightbox].alt || displayImages[lightbox].post.caption?.slice(0, 140) || "Studio S image"} width="1080" height="1080" />
+            {displayImages[lightbox].post.caption && <figcaption>{displayImages[lightbox].post.caption}</figcaption>}
+            {displayImages[lightbox].post.permalink && <a href={displayImages[lightbox].post.permalink} target="_blank" rel="noopener noreferrer">View original post on Instagram ↗</a>}
           </figure>
-          {images.length > 1 && (
+          {displayImages.length > 1 && (
             <button
               className="btn btn-sm lightbox-control instagram-lightbox-next"
               type="button"
               aria-label="Next image"
-              onClick={(event) => { event.stopPropagation(); setLightbox((lightbox + 1) % images.length); }}
+              onClick={(event) => { event.stopPropagation(); setLightbox((lightbox + 1) % displayImages.length); }}
             >→</button>
           )}
         </div>,

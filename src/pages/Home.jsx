@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal.jsx";
 import { BookingLink } from "../components/Layout.jsx";
 import { Magnetic, ParticleField, VelocityMarquee, useReducedMotion, useScrollCardStack } from "../components/motion.jsx";
-import { usePageMeta } from "../hooks.js";
+import { useDialogFocusTrap, usePageMeta } from "../hooks.js";
 import InstagramGallery from "../components/InstagramGallery.jsx";
 
 const HERO_SLIDES = [
@@ -15,8 +15,8 @@ const HERO_SLIDES = [
     title: "Every brand has",
     accent: "a story worth telling.",
     copy: "A point of view. A half-formed idea. Something you want the world to understand. That is where we begin.",
-    src: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1400&auto=format&fit=crop",
-    alt: "A considered creative studio space ready for a new idea",
+    src: "/images/studio/studio-overview.jpg",
+    alt: "Studio S image from the official rate card",
     caption: "Every good story starts with a little room to think.",
   },
   {
@@ -26,8 +26,8 @@ const HERO_SLIDES = [
     title: "Find the thought",
     accent: "only you can tell.",
     copy: "We get close to the people, purpose and details that make your story yours — then find the clearest way to bring it out.",
-    src: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1400&auto=format&fit=crop",
-    alt: "Podcast microphones set up for an honest conversation",
+    src: "/images/studio/audio-production.jpg",
+    alt: "Studio S audio production set-up from the official rate card",
     caption: "Good questions make space for the real story.",
   },
   {
@@ -37,8 +37,8 @@ const HERO_SLIDES = [
     title: "Give the idea",
     accent: "a world to live in.",
     copy: "A portrait, a set, a sound, a scene. We shape the right visual language and choose the right space for your story to feel real.",
-    src: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=1400&auto=format&fit=crop",
-    alt: "Photographer shaping a portrait on a softly lit set",
+    src: "/images/studio/video-photoshoot.jpg",
+    alt: "Studio S video and photoshoot set-up from the official rate card",
     caption: "Light, space and detail turn a thought into a world.",
   },
   {
@@ -48,8 +48,8 @@ const HERO_SLIDES = [
     title: "From first frame",
     accent: "to final sound.",
     copy: "Podcast, photography, film, sound and animation — thoughtful production turns the plan into something made to be experienced.",
-    src: "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1400&auto=format&fit=crop",
-    alt: "Cinema camera ready to capture a story on set",
+    src: "/images/studio/live-streaming.jpg",
+    alt: "Studio S live streaming set-up from the official rate card",
     caption: "Five creative crafts. One story, brought to life.",
   },
   {
@@ -59,8 +59,8 @@ const HERO_SLIDES = [
     title: "Make them feel",
     accent: "something real.",
     copy: "Because the best content does more than look good. It creates connection, stays with people and gives your brand a voice.",
-    src: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1400&auto=format&fit=crop",
-    alt: "Vibrant creative imagery representing a story reaching its audience",
+    src: "/images/studio/post-production.jpg",
+    alt: "Studio S post-production set-up from the official rate card",
     caption: "A story made to connect, wherever it goes.",
   },
 ];
@@ -139,22 +139,22 @@ const CRAFTS = [
 
 const WORK = [
   {
-    src: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1000&auto=format&fit=crop",
-    alt: "Sound-treated studio with mixing desk",
+    src: "/images/studio/space-1.jpg",
+    alt: "Studio S image from the official rate card",
     title: "Sound & Podcast Room",
     sub: "Quiet, treated, mic-ready.",
     tag: "Podcast",
   },
   {
-    src: "https://images.unsplash.com/photo-1520390138845-fd2d229dd553?q=80&w=1000&auto=format&fit=crop",
-    alt: "Bright photo studio with backdrop",
+    src: "/images/studio/space-2.jpg",
+    alt: "Studio S image from the official rate card",
     title: "Daylight Photo Studio",
     sub: "Soft window light + backdrop wall.",
     tag: "Photo",
   },
   {
-    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
-    alt: "Creative lounge and production office",
+    src: "/images/studio/space-3.jpg",
+    alt: "Studio S image from the official rate card",
     title: "Creative Lounge",
     sub: "Prep, interviews and small gatherings.",
     tag: "Space",
@@ -217,6 +217,7 @@ export default function Home() {
   );
   const [lightbox, setLightbox] = useState(null);
   const closeButtonRef = useRef(null);
+  const lightboxRef = useRef(null);
   const isLightboxOpen = lightbox !== null;
   const reducedMotion = useReducedMotion();
   const [walkScene, setWalkScene] = useState(0);
@@ -234,22 +235,27 @@ export default function Home() {
 
   const activeIndex = walkEnabled ? walkScene : 0;
   const current = HERO_SLIDES[activeIndex];
-  useEffect(() => {
-    if (!isLightboxOpen) return undefined;
-    const previousOverflow = document.body.style.overflow;
-    const previousFocus = document.activeElement;
-    document.body.style.overflow = "hidden";
-    closeButtonRef.current?.focus();
-    const onKeyDown = (event) => {
-      if (event.key === "Escape") setLightbox(null);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus();
-    };
-  }, [isLightboxOpen]);
+
+  const goToScene = (index) => {
+    const section = heroSectionRef.current;
+    if (!section) return;
+    const top = section.offsetTop;
+    const range = Math.max(1, section.offsetHeight - window.innerHeight);
+    const target = top + (index / Math.max(1, HERO_SLIDES.length - 1)) * range;
+    window.scrollTo({ top: target, behavior: reducedMotion ? "auto" : "smooth" });
+  };
+
+  const skipStory = () => {
+    const section = heroSectionRef.current;
+    if (!section) return;
+    window.scrollTo({ top: section.offsetTop + section.offsetHeight, behavior: reducedMotion ? "auto" : "smooth" });
+  };
+  useDialogFocusTrap({
+    open: isLightboxOpen,
+    onClose: () => setLightbox(null),
+    dialogRef: lightboxRef,
+    initialFocusRef: closeButtonRef,
+  });
 
   return (
     <>
@@ -271,8 +277,10 @@ export default function Home() {
                   <img
                     src={s.src}
                     alt={i === activeIndex ? s.alt : ""}
+                    width="850"
+                    height="1200"
                     fetchPriority={i === 0 ? "high" : undefined}
-                    loading={i === 0 || walkEnabled ? "eager" : "lazy"}
+                    loading={i === 0 ? "eager" : "lazy"}
                     decoding="async"
                   />
                   <div className="hero-card-copy">
@@ -297,6 +305,25 @@ export default function Home() {
                   <b>{String(activeIndex + 1).padStart(2, "0")}</b> / {String(HERO_SLIDES.length).padStart(2, "0")}
                 </span>
               </div>
+            )}
+            {walkEnabled && (
+              <nav className="hero-chapters" aria-label="Hero chapters">
+                {HERO_SLIDES.map((slide, index) => (
+                  <button
+                    key={slide.key}
+                    type="button"
+                    className={`hero-chapter-dot${index === activeIndex ? " is-active" : ""}`}
+                    aria-label={`Chapter ${index + 1}: ${slide.label}`}
+                    aria-current={index === activeIndex ? "true" : undefined}
+                    onClick={() => goToScene(index)}
+                  >
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                  </button>
+                ))}
+                <button type="button" className="hero-skip" onClick={skipStory}>
+                  Skip story <span aria-hidden="true">↓</span>
+                </button>
+              </nav>
             )}
           </figure>
           <div className="hero-copy">
@@ -324,7 +351,14 @@ export default function Home() {
           <div className="story-chapters" aria-label="The Studio S creative process">
             {HERO_SLIDES.slice(1).map((scene) => (
               <article className="story-chapter" key={scene.key}>
-                <img src={scene.src} alt={scene.alt} loading="lazy" />
+                <img
+                  src={scene.src}
+                  alt={scene.alt}
+                  width="850"
+                  height="1200"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div>
                   <span className="kicker">{scene.label}</span>
                   <h2 className="display h-xl">{scene.title} <i>{scene.accent}</i></h2>
@@ -344,9 +378,14 @@ export default function Home() {
           A <i>working house</i> for people who make things.
           <span className="manifesto-chip">
             <img
-              src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=600&auto=format&fit=crop"
-              alt="Calm studio lounge with wooden table and chairs"
-              loading="lazy"
+              src="/images/studio/space-1.jpg"
+              
+               
+               alt="Studio S image from the official rate card"
+               width="600"
+               height="400"
+               loading="lazy"
+               decoding="async"
             />
           </span>
         </h2>
@@ -417,10 +456,17 @@ export default function Home() {
                 type="button"
                 key={w.title}
                 onClick={() => setLightbox(w)}
-                aria-label={`Enlarge image: ${w.alt}`}
               >
+                <span className="sr-only">View larger image:</span>
                 <span className="work-media">
-                  <img src={w.src} alt={w.alt} loading="lazy" />
+                  <img
+                    src={w.src}
+                    alt={w.alt}
+                    width="800"
+                    height="534"
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <span className="work-tag">{w.tag}</span>
                 </span>
                 <span className="work-meta">
@@ -430,6 +476,7 @@ export default function Home() {
               </button>
             ))}
           </div>
+          <p className="media-note" style={{ marginTop: 12 }}>Photography on this page comes from the official Studio S rate card.</p>
           <div className="work-foot">
             <Link className="btn btn-ember" to="/spaces">Book a walkthrough</Link>
           </div>
@@ -441,7 +488,7 @@ export default function Home() {
           <div className="instagram-preview-heading">
             <div>
               <span className="kicker">Selected stories</span>
-              <h2 className="display h-xl" id="stories-title">Stories from <i>inside the house.</i></h2>
+              <h2 className="display h-xl" id="stories-title">Stories we&apos;ve helped <i>tell.</i></h2>
             </div>
             <a className="text-link text-link-light" href="https://www.instagram.com/studio_s.gh" target="_blank" rel="noopener">
                Follow @studio_s.gh on Instagram <span aria-hidden="true">↗</span>
@@ -532,9 +579,15 @@ export default function Home() {
       </section>
 
       {lightbox && createPortal(
-        <div className="lightbox open home-lightbox" role="dialog" aria-modal="true" aria-label="Studio spaces image preview" onClick={() => setLightbox(null)}>
+        <div ref={lightboxRef} className="lightbox open home-lightbox" role="dialog" aria-modal="true" aria-label={lightbox.title ? `${lightbox.title} image preview` : "Studio spaces image preview"} onClick={() => setLightbox(null)}>
           <button ref={closeButtonRef} className="btn btn-sm lightbox-control home-lightbox-close" type="button" onClick={() => setLightbox(null)}>Close ×</button>
-          <img src={lightbox.src} alt={lightbox.alt} onClick={(e) => e.stopPropagation()} />
+          <img
+            src={lightbox.src}
+            alt={lightbox.alt}
+            width="800"
+            height="534"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>,
         document.body
       )}

@@ -1,35 +1,72 @@
 /* Studio S — Studio of Stories | Design system
-   (Fonts load via <link> tags in index.html for faster first paint.) */
+   Fonts are self-hosted from /public/fonts so the site loads no third-party
+   font CSS and the display face always matches the brand. */
 
+@font-face{
+  font-family:"Archivo";
+  font-style:normal;
+  font-weight:100 900;
+  font-stretch:100%;
+  font-display:swap;
+  src:url("/fonts/archivo-latin-var.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Fraunces";
+  font-style:normal;
+  font-weight:300 900;
+  font-display:swap;
+  src:url("/fonts/fraunces-latin-var.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Fraunces";
+  font-style:italic;
+  font-weight:300 900;
+  font-display:swap;
+  src:url("/fonts/fraunces-italic-latin-var.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Space Grotesk";
+  font-style:normal;
+  font-weight:300 700;
+  font-display:swap;
+  src:url("/fonts/space-grotesk-latin-var.woff2") format("woff2");
+}
+
+/* Single source of truth for the editorial palette. studio.css builds on
+   these values and no longer re-declares them. */
 :root{
-  /* ---- Brand palette ---------------------------------------------- */
-  --brand:#4C1A57;          /* Deep Purple — structure, type, primary surfaces */
-  --brand-deep:#35103F;     /* Deep Purple shade — depth & dark panels          */
-  --brand-tint:#F0E4F3;     /* Deep Purple tint — soft fills                    */
-  --pink:#FF3CC7;           /* Hot Pink — energy, secondary highlights          */
-  --pink-light:#FF8ADF;     /* Hot Pink tint — accents on dark surfaces         */
-  --pink-deep:#B5107F;      /* Hot Pink shade — accessible text & solid states  */
-  --pink-tint:#FFE4F7;      /* Hot Pink tint — badges & notices                 */
-  --lime:#F0F600;           /* Electric Lime — primary action & hero highlights */
-  --lime-deep:#D6DC00;      /* Lime shade — borders & pressed states            */
-  --lime-tint:#FBFFB8;      /* Lime tint — highlights                           */
-  --cyan:#00E0E8;           /* Bright Cyan — interactive accent                 */
-  --cyan-deep:#00787E;      /* Cyan shade — accessible text & icons             */
-  --cyan-tint:#D9FCFD;      /* Cyan tint — icon & badge fills                   */
-  --teal:#007C77;           /* Deep Teal — supporting surface & success         */
-  --teal-deep:#00514D;      /* Teal shade — deep supporting surface             */
-  --teal-tint:#DFF5F3;      /* Teal tint — quiet fills                          */
+  /* Canvas */
+  --paper:#F5F1E8;
+  --paper-2:#EBE4D7;
+  --paper-3:#E1D8C8;
+  --card:#FFFDF8;
 
-  /* ---- Neutrals (tinted with the brand purple) -------------------- */
-  --paper:#F7F4F8;
-  --paper-2:#EDE6EF;
-  --card:#FCFAFD;
-  --ink:#4C1A57;
+  /* Ink */
+  --ink:#1E0F23;
   --ink-2:#3A1442;
-  --muted:#6D5A74;
-  --line:rgba(76,26,87,.16);
+  --muted:#6A5D66;
+  --line:rgba(30,15,35,.16);
+  --line-strong:rgba(30,15,35,.34);
 
-  /* ---- Semantic aliases ------------------------------------------- */
+  /* Brand palette */
+  --brand:#4C1A57;
+  --brand-deep:#35103F;
+  --brand-tint:#E9DDF1;
+  --pink:#FF3CC7;
+  --pink-light:#FF8ADF;
+  --pink-deep:#B5107F;
+  --pink-tint:#FFD9F1;
+  --lime:#F0F600;
+  --lime-deep:#D6DC00;
+  --lime-tint:#F4F9A8;
+  --cyan:#00E0E8;
+  --cyan-deep:#00787E;
+  --cyan-tint:#D6F9FA;
+  --teal:#007C77;
+  --teal-deep:#00514D;
+  --teal-tint:#D8EFEC;
+
+  /* Semantic aliases */
   --ember:var(--pink);
   --ember-deep:var(--pink-deep);
   --fig:var(--brand-deep);
@@ -37,15 +74,28 @@
   --gold:var(--lime-deep);
   --ok:var(--teal);
 
-  /* ---- Shape & type ----------------------------------------------- */
-  --radius-lg:28px;
-  --radius-md:18px;
-  --radius-sm:12px;
-  --font-display:"Fraunces",Georgia,serif;
+  /* Type */
+  --font-display:"Archivo","Space Grotesk",system-ui,sans-serif;
+  --font-editorial:"Fraunces",Georgia,serif;
   --font-body:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+
+  /* Shape */
+  --radius-lg:24px;
+  --radius-md:16px;
+  --radius-sm:10px;
+  --shadow:0 30px 60px -32px rgba(30,15,35,.38);
   --max:1200px;
   --pad:clamp(18px,4vw,44px);
-  --shadow:0 24px 60px -24px rgba(53,16,63,.28);
+
+  /* Motion */
+  --ease-out:cubic-bezier(.22,.61,.36,1);
+  --dur-fast:.22s;
+  --dur-med:.45s;
+  --dur-slow:.7s;
+
+  /* Accessible focus: dark magenta reads clearly on paper, lime on ink. */
+  --focus:#7A0A57;
+  --focus-dark:var(--lime);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;overscroll-behavior-y:none}
@@ -61,9 +111,9 @@ a{color:inherit}
 /* Text links pick up the cyan/teal interactive accent; buttons & cards keep their own roles. */
 main a:where(:not(.btn):not(.brand):not(.svc-row):not(.instagram-image)){color:var(--teal-deep);text-decoration-color:rgba(0,124,119,.4);text-underline-offset:3px}
 main a:where(:not(.btn):not(.brand):not(.svc-row):not(.instagram-image)):hover{color:var(--pink-deep);text-decoration-color:currentColor}
-:focus-visible{outline:3px solid var(--pink-deep);outline-offset:3px;border-radius:6px}
-.band :focus-visible,.dark-panel :focus-visible,.page-hero :focus-visible,.pricing-hero :focus-visible,footer :focus-visible,.promo-banner :focus-visible{outline-color:var(--lime)}
-.cta-panel :focus-visible{outline-color:var(--brand-deep)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+.band :focus-visible,.dark-panel :focus-visible,.work-section :focus-visible,.instagram-preview-section :focus-visible,.page-hero :focus-visible,.pricing-hero :focus-visible,footer :focus-visible,.promo-banner :focus-visible,.promo-dialog :focus-visible,.mobile-nav :focus-visible,.lightbox :focus-visible{outline-color:var(--focus-dark)}
+.cta-panel :focus-visible,.btn-ember:focus-visible,.btn-solid:focus-visible{outline-color:var(--ink)}
 .skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:10px 16px;z-index:200;border-radius:0 0 12px 0}
 .skip:focus{left:0}
 .wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}

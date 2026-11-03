@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import studioLogo from "../assets/studio-s-logo.svg";
+import { STUDIO_S_CONFIG } from "../config.js";
 
 const STORAGE_KEY = "studio-s-podcast-support-promo";
 const APPLICATION_URL = "https://forms.gle/kCDFrUQ3AHKdztkC7";
-const PODCAST_IMAGE =
-  "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1200&auto=format&fit=crop";
+const PODCAST_IMAGE = "/images/studio/audio-production.jpg";
 
 function getInitialState() {
   try {
@@ -32,7 +32,19 @@ export default function Promotion() {
     if (state !== "modal") return undefined;
 
     const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement;
+    const background = [
+      document.querySelector(".site-head"),
+      document.querySelector("main"),
+      document.querySelector("footer"),
+      document.querySelector(".to-top"),
+    ].filter(Boolean);
+
     document.body.style.overflow = "hidden";
+    background.forEach((element) => {
+      element.dataset.promoInert = element.inert ? "true" : "false";
+      element.inert = true;
+    });
     closeButtonRef.current?.focus();
 
     function onKeyDown(event) {
@@ -61,7 +73,14 @@ export default function Promotion() {
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
+      background.forEach((element) => {
+        element.inert = element.dataset.promoInert === "true";
+        delete element.dataset.promoInert;
+      });
       document.removeEventListener("keydown", onKeyDown);
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) {
+        previousFocus.focus();
+      }
     };
   }, [state]);
 
@@ -81,7 +100,7 @@ export default function Promotion() {
     return (
       <aside className="promo-banner" aria-label="Podcast studio support promotion">
         <div className="promo-banner-inner">
-          <img className="promo-banner-logo" src={studioLogo} alt="" aria-hidden="true" />
+          <img className="promo-banner-logo" src={studioLogo} alt="" width="34" height="34" aria-hidden="true" />
           <p>
             <strong>Got a podcast idea?</strong>{" "}
             Get 3 months of free studio support.
@@ -117,8 +136,16 @@ export default function Promotion() {
         aria-describedby="promo-description"
       >
         <div className="promo-visual">
-          <img src={PODCAST_IMAGE} alt="" aria-hidden="true" />
-          <span className="promo-visual-label">STUDIO OF STORIES · ACCRA</span>
+          <img
+            src={PODCAST_IMAGE}
+            alt=""
+            width="845"
+            height="1200"
+            loading="eager"
+            decoding="async"
+            aria-hidden="true"
+          />
+          <span className="promo-visual-label">STUDIO OF STORIES · TEMA</span>
           <span className="promo-visual-note">Your story deserves a room.</span>
         </div>
         <div className="promo-content">
@@ -143,7 +170,7 @@ export default function Promotion() {
           <div className="promo-location">
             <span>One exceptional idea</span>
             <span aria-hidden="true">·</span>
-            <span>C3 Coastal Estates, Accra</span>
+            <span>{STUDIO_S_CONFIG.studioAddress}</span>
           </div>
           <a
             className="btn btn-ember promo-apply"
@@ -155,9 +182,9 @@ export default function Promotion() {
             Apply now <span aria-hidden="true">↗</span>
           </a>
           <p className="promo-contact">
-            Questions? <a href="tel:0208409235">020 840 9235</a>
+            Questions? <a href={`tel:${STUDIO_S_CONFIG.phone.replace(/[^\d+]/g, "")}`}>{STUDIO_S_CONFIG.phone}</a>
             <span aria-hidden="true"> · </span>
-            <a href="mailto:studioofstories.gh@gmail.com">Email Studio S</a>
+            <a href={`mailto:${STUDIO_S_CONFIG.email}`}>Email Studio S</a>
           </p>
         </div>
       </section>

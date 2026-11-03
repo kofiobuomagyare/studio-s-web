@@ -13,10 +13,10 @@ export default function Terms() {
         <p className="crumb"><Link to="/">Home</Link> / Terms &amp; Conditions</p>
         <span className="kicker">The fine print, in plain language</span>
         <h1 className="display h-giant">Terms that <i>protect both sides.</i></h1>
-        <p className="lede">Short version: a request is not a booking until we confirm it in writing, prices follow the published rate card, and anything extra is agreed before the clock runs. Have these terms reviewed by legal counsel.</p>
+        <p className="lede">Short version: a request is not a booking until we confirm it in writing, prices follow the published rate card, and anything extra is agreed before the clock runs.</p>
       </div></div>
       <section className="section"><div className="wrap prose">
-        <p className="hint">Last updated: October 2026.</p>
+        <p className="hint">Last updated: November 2026.</p>
         <h2 className="display h-md">Requests vs confirmations</h2>
         <p>Submitting the <BookingLink to="/booking">booking form</BookingLink> is a request for availability — not a confirmed booking. Your date is locked only when Studio S confirms it back to you in writing, with the agreed service, time and price.</p>
         <h2 className="display h-md">Prices &amp; payment</h2>

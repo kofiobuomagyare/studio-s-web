@@ -20,7 +20,18 @@ import Gallery from "./pages/Gallery.jsx";
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
   useEffect(() => {
-    if (!hash) window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    if (hash) {
+      const target = document.querySelector(hash);
+      if (target) {
+        target.scrollIntoView({ behavior: "instant" in window ? "instant" : "auto", block: "start" });
+        return;
+      }
+      const timer = window.setTimeout(() => {
+        document.querySelector(hash)?.scrollIntoView({ behavior: "instant" in window ? "instant" : "auto", block: "start" });
+      }, 120);
+      return () => window.clearTimeout(timer);
+    }
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
   }, [pathname, hash]);
   return null;
 }

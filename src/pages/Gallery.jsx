@@ -26,7 +26,8 @@ export default function Gallery() {
         <div className="wrap">
           <div className="instagram-gallery-heading">
             <span className="kicker">Selected stories</span>
-            <p className="mut">A curated Studio S image archive, alongside new Instagram posts when connected.</p>
+            <h2 className="display h-md">Work from the studio and on location.</h2>
+            <p className="mut">A curated Studio S image archive — including on-location work from Pa Gya! 10 — alongside new Instagram posts when connected.</p>
           </div>
           <InstagramGallery />
         </div>

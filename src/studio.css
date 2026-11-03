@@ -6,53 +6,6 @@
    inherits the same system without losing existing behaviour.
    ========================================================================== */
 
-html{
-  /* no overflow-x:hidden here: it breaks the hero scroll-story sticky */
-}
-:root{
-  /* Canvas */
-  --paper:#F5F1E8;
-  --paper-2:#EBE4D7;
-  --paper-3:#E1D8C8;
-  --card:#FFFDF8;
-
-  /* Ink */
-  --ink:#1E0F23;
-  --ink-2:#3A1442;
-  --muted:#6A5D66;
-  --line:rgba(30,15,35,.16);
-  --line-strong:rgba(30,15,35,.34);
-
-  /* Brand palette */
-  --brand:#4C1A57;
-  --brand-deep:#35103F;
-  --brand-tint:#E9DDF1;
-  --pink:#FF3CC7;
-  --pink-light:#FF8ADF;
-  --pink-deep:#B5107F;
-  --pink-tint:#FFD9F1;
-  --lime:#F0F600;
-  --lime-deep:#D6DC00;
-  --lime-tint:#F4F9A8;
-  --cyan:#00E0E8;
-  --cyan-deep:#00787E;
-  --cyan-tint:#D6F9FA;
-  --teal:#007C77;
-  --teal-deep:#00514D;
-  --teal-tint:#D8EFEC;
-
-  /* Type */
-  --font-display:"Archivo","Space Grotesk",system-ui,sans-serif;
-  --font-editorial:"Fraunces",Georgia,serif;
-  --font-body:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-
-  /* Shape */
-  --radius-lg:24px;
-  --radius-md:16px;
-  --radius-sm:10px;
-  --shadow:0 30px 60px -32px rgba(30,15,35,.38);
-}
-
 /* --------------------------------------------------------------------------
    Foundation
    -------------------------------------------------------------------------- */
@@ -82,18 +35,24 @@ main a:where(:not(.btn):not(.brand):not(.svc-row):not(.instagram-image):not(.cra
 }
 
 :focus-visible{
-  outline:3px solid var(--pink-deep);
+  outline:3px solid var(--focus);
   outline-offset:3px;
   border-radius:4px;
 }
 .band :focus-visible,
 .dark-panel :focus-visible,
 .work-section :focus-visible,
-.site-head :focus-visible,
+.instagram-preview-section :focus-visible,
+.page-hero :focus-visible,
+.pricing-hero :focus-visible,
 footer :focus-visible,
 .promo-banner :focus-visible,
-.mobile-nav :focus-visible{outline-color:var(--lime)}
-.cta-panel :focus-visible{outline-color:var(--ink)}
+.promo-dialog :focus-visible,
+.mobile-nav :focus-visible,
+.lightbox :focus-visible{outline-color:var(--focus-dark)}
+.cta-panel :focus-visible,
+.btn-ember:focus-visible,
+.btn-solid:focus-visible{outline-color:var(--ink)}
 
 .wrap{max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
 
