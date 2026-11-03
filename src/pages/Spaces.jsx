@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { BookingLink } from "../components/Layout.jsx";
 import { usePageMeta } from "../hooks.js";
-import { unsplashSrcSet } from "../imageUtils.js";
 
 export default function Spaces() {
   usePageMeta("Studio Spaces — Studio S", "Tour Studio S spaces: sound & podcast room, daylight photo studio and creative lounge — atmosphere, uses and amenities.");

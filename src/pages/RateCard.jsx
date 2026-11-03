@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BookingLink } from "../components/Layout.jsx";
 import { usePageMeta } from "../hooks.js";
@@ -529,7 +529,6 @@ export default function RateCard() {
   const [tab, setTab] = useState("all");
   const [compareTab, setCompareTab] = useState("visual");
   const [mobileComparePlan, setMobileComparePlan] = useState(null);
-  const [scrollToPanel, setScrollToPanel] = useState(false);
   const { hash } = useLocation();
   const navigate = useNavigate();
   const compareRef = useRef(null);
@@ -543,13 +542,12 @@ export default function RateCard() {
   const comparePlans = PLANS.filter((plan) => plan.category === compareCategory.id);
   const compareRows = COMPARE_ROWS[compareCategory.id];
 
-  useEffect(() => {
-    if (!comparePlans.some((plan) => plan.id === mobileComparePlan)) {
-      setMobileComparePlan(comparePlans[0]?.id ?? null);
-    }
-  }, [comparePlans, mobileComparePlan]);
-  const mobileCompareSelected = comparePlans.find((plan) => plan.id === mobileComparePlan) || comparePlans[0];
+  const selectedMobileComparePlan = comparePlans.some((plan) => plan.id === mobileComparePlan)
+    ? mobileComparePlan
+    : comparePlans[0]?.id ?? null;
+  const mobileCompareSelected = comparePlans.find((plan) => plan.id === selectedMobileComparePlan) || comparePlans[0];
 
+  /* eslint-disable react/set-state-in-effect */
   useEffect(() => {
     const category = HASH_CATEGORY[hash.slice(1)];
     if (!category) return;
@@ -566,27 +564,24 @@ export default function RateCard() {
     }, 140);
     return () => clearTimeout(timer);
   }, [hash, tab]);
+  /* eslint-enable react/set-state-in-effect */
 
   const chooseTab = (name) => {
     const panel = pricingPanelRef.current;
-    if (panel) {
-      const rect = panel.getBoundingClientRect();
-      if (rect.top < 96) setScrollToPanel(true);
-    }
+    const shouldScroll = Boolean(panel && panel.getBoundingClientRect().top < 96);
     setTab(name);
     if (name !== "all") setCompareTab(name);
     if (hash) navigate("/rate-card", { replace: true });
+    if (shouldScroll) {
+      requestAnimationFrame(() => {
+        const nextPanel = pricingPanelRef.current;
+        if (!nextPanel) return;
+        const top = nextPanel.getBoundingClientRect().top + window.scrollY;
+        const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: Math.max(0, top - 100), behavior: calm ? "auto" : "smooth" });
+      });
+    }
   };
-
-  useEffect(() => {
-    if (!scrollToPanel) return;
-    setScrollToPanel(false);
-    const panel = pricingPanelRef.current;
-    if (!panel) return;
-    const top = panel.getBoundingClientRect().top + window.scrollY;
-    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: Math.max(0, top - 100), behavior: calm ? "auto" : "smooth" });
-  }, [tab, scrollToPanel]);
 
   const onTabKeyDown = (event, index) => {
     const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
@@ -783,7 +778,7 @@ export default function RateCard() {
             <select
               id="compare-plan"
               className="compare-mobile-select"
-              value={mobileComparePlan ?? ""}
+              value={selectedMobileComparePlan ?? ""}
               onChange={(event) => setMobileComparePlan(event.target.value)}
             >
               {comparePlans.map((plan) => (

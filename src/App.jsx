@@ -95,11 +95,12 @@ function NotFound() {
 }
 
 export default function App() {
-  const [consentOpen, setConsentOpen] = useState(false);
+  const [consentOpen, setConsentOpen] = useState(
+    () => analyticsConfigured() && getConsent() === null
+  );
   useEffect(() => {
     // Resume previously-consented tracking (fresh consent flows via the banner).
     if (analyticsConfigured() && getConsent() === "accepted") loadAnalytics();
-    setConsentOpen(analyticsConfigured() && getConsent() === null);
   }, []);
   return (
     <BrowserRouter>

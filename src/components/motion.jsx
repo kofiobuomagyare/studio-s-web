@@ -1,3 +1,4 @@
+/* eslint-disable react/only-export-components */
 import { useEffect, useRef, useState } from "react";
 
 /* Motion gates: immersive effects run only for fine-pointer users

@@ -825,9 +825,12 @@ input.fl:focus,select.fl:focus,textarea.fl:focus{border-color:var(--pink-deep);o
 .dark-panel .rule{background:rgba(245,241,232,.16)}
 .dark-panel .hint{color:rgba(245,241,232,.58)}
 .values{gap:14px}
-.value:nth-child(3n+1){background:var(--brand-tint)}
-.value:nth-child(3n+2){background:var(--card)}
-.value:nth-child(3n){background:var(--cyan-tint)}
+.value:nth-child(6n+1){background:var(--lime-tint)}
+.value:nth-child(6n+2){background:var(--brand-tint)}
+.value:nth-child(6n+3){background:var(--pink-tint)}
+.value:nth-child(6n+4){background:var(--cyan-tint)}
+.value:nth-child(6n+5){background:var(--brand-tint)}
+.value:nth-child(6n){background:var(--teal-tint)}
 
 /* --------------------------------------------------------------------------
    Instagram, promotion, consent, back-to-top

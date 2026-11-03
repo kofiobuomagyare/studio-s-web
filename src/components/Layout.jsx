@@ -1,3 +1,4 @@
+/* eslint-disable react/only-export-components */
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { STUDIO_S_CONFIG } from "../config.js";
@@ -45,6 +46,8 @@ export function telHref(phone = STUDIO_S_CONFIG.phone) {
   return `tel:${phone.replace(/[^\d+]/g, "")}`;
 }
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 const LINKS = [
   ["Home", "/"],
   ["About", "/about"],
@@ -57,13 +60,15 @@ const LINKS = [
 ];
 
 export function Header() {
-  const [open, setOpen] = useState(false);
   const location = useLocation();
+  const [open, setOpen] = useState(false);
+  const [previousPathname, setPreviousPathname] = useState(location.pathname);
   const menuButtonRef = useRef(null);
 
-  useEffect(() => {
+  if (previousPathname !== location.pathname) {
+    setPreviousPathname(location.pathname);
     setOpen(false);
-  }, [location.pathname]);
+  }
 
   useEffect(() => {
     if (!open) return undefined;
@@ -144,7 +149,7 @@ export function Header() {
 }
 
 export function Footer() {
-  const year = new Date().getFullYear();
+  const year = CURRENT_YEAR;
   return (
     <footer>
       <div className="wrap">
