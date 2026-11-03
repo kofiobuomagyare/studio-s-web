@@ -443,8 +443,8 @@ export default function Home() {
               <span className="kicker">Selected stories</span>
               <h2 className="display h-xl" id="stories-title">Stories from <i>inside the house.</i></h2>
             </div>
-            <a className="text-link text-link-light" href="https://www.instagram.com/studios.gh" target="_blank" rel="noopener">
-              Follow @studios.gh <span aria-hidden="true">↗</span>
+            <a className="text-link text-link-light" href="https://www.instagram.com/studio_s.gh" target="_blank" rel="noopener">
+               <Instagram>Follow @studio_s.gh on Instagram</Instagram> <span aria-hidden="true">↗</span>
             </a>
           </div>
           <InstagramGallery preview />
