@@ -5,7 +5,7 @@ export const EVENT_COLLECTIONS = [
     id: "everts-signs",
     title: "Everts Signs with Smartline Publishers",
     kicker: "Event collection",
-    description: "Photographs from Everts Signs with Smartline Publishers, presented as a single Studio of Stories event collection.",
+    description: "The partnership signing ceremony and celebration, captured in 10 photographs.",
     cover: "/images/galleries/everts-signs/01.jpg",
     coverAlt: "Everts Signs with Smartline Publishers event photograph",
     images: [
@@ -25,7 +25,7 @@ export const EVENT_COLLECTIONS = [
     id: "la-victoria",
     title: "La Victoria Launch",
     kicker: "Event collection",
-    description: "Photographs from La Victoria Launch, presented as a single Studio of Stories event collection.",
+    description: "Product reveal, guest moments, and the launch atmosphere — 10 photos from the celebration.",
     cover: "/images/galleries/la-victoria/01.jpg",
     coverAlt: "La Victoria Launch event photograph",
     images: [
@@ -45,7 +45,7 @@ export const EVENT_COLLECTIONS = [
     id: "breast-cancer",
     title: "Breast Cancer Awareness Campaign, Temasco",
     kicker: "Event collection",
-    description: "Photographs from Breast Cancer Awareness Campaign 2026 in Temasco.",
+    description: "Community walk, education sessions, and survivor stories — 8 photos from the 2026 campaign.",
     cover: "/images/galleries/breast-cancer/01.jpg",
     coverAlt: "Breast Cancer Awareness Campaign event photograph",
     images: [
@@ -63,7 +63,7 @@ export const EVENT_COLLECTIONS = [
     id: "pa-gya-10",
     title: "Pa Gya! 10",
     kicker: "Event collection",
-    description: "Photographs from Pa Gya! 10, the annual literature and arts festival.",
+    description: "Author talks, panel discussions, live readings, and festival life — 10 photos from the literature festival.",
     cover: "/images/gallery/pa-gya-conversation.jpg",
     coverAlt: "Pa Gya! 10 event photograph",
     images: [
@@ -83,7 +83,7 @@ export const EVENT_COLLECTIONS = [
     id: "smartline-aburi",
     title: "Smartline Literacy Protest, Aburi",
     kicker: "Event collection",
-    description: "Photographs from Smartline Literacy Pro Test in Aburi, across the Aburi Demonstration JHS and Aburi Anglican School sub-galleries.",
+    description: "Student marches, literacy advocacy, and community action across two schools — 16 photos from the protest.",
     cover: "/images/galleries/aburi/demonstration-jhs/01.jpg",
     coverAlt: "Smartline Literacy Protest in Aburi event photograph",
     images: [

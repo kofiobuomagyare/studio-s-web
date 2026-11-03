@@ -107,7 +107,6 @@ export function Header() {
         </nav>
         <BookingLink className="btn btn-solid btn-sm head-book" aria-label="Request a booking">
           <span className="book-long">Request a Booking</span>
-          <span className="book-short" aria-hidden="true">Book</span>
         </BookingLink>
         <button
           ref={menuButtonRef}
@@ -139,8 +138,8 @@ export function Header() {
           </NavLink>
         ))}
         <div className="mobile-cta">
-          <BookingLink className="btn btn-ember" onClick={() => setOpen(false)}>
-            Request a Booking
+          <BookingLink className="btn btn-ember" aria-label="Request a booking">
+            Request a booking <span aria-hidden="true">↗</span>
           </BookingLink>
         </div>
       </nav>

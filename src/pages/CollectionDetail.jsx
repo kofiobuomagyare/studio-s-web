@@ -44,7 +44,7 @@ export default function CollectionDetail() {
       </section>
       <section className="section event-collection-detail-section">
         <div className="wrap">
-          <div className="event-collection-detail-header">
+          <div className="detail-back-header">
             <Link className="btn btn-ghost btn-sm" to="/gallery">
               ← Back to gallery
             </Link>

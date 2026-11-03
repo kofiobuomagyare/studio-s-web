@@ -78,16 +78,7 @@
     -webkit-overflow-scrolling: touch;
     padding-bottom: calc(18px + env(safe-area-inset-bottom));
   }
-  .head-pill .btn-solid.head-book {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    padding: 9px 12px;
-    font-size: 13px;
-  }
-  .head-book .book-long { display: none; }
-  .head-book .book-short { display: inline; }
+  .head-pill .btn-solid.head-book { display: none; }
 }
 
 .wrap.prose {
@@ -383,6 +374,223 @@
   .hero-chapters { pointer-events: auto; }
 }
 
+/* Standardized image containers for Services & Spaces */
+.service-image,
+.space-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--paper-2);
+}
+.service-image img,
+.space-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .5s var(--ease-out);
+}
+.service-card:hover .service-image img,
+.space-card:hover .space-image img {
+  transform: scale(1.03);
+}
+
+/* Service/space card layouts */
+.service-card,
+.space-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(22px, 4vw, 56px);
+  align-items: start;
+  margin-bottom: clamp(48px, 6vw, 72px);
+}
+.service-card.flip > .service-copy,
+.space-card.flip > .space-copy {
+  order: 2;
+}
+.service-card .service-image,
+.space-card .space-image {
+  min-width: 0;
+}
+.service-copy,
+.space-copy {
+  min-width: 0;
+}
+
+/* Two-column card grid for smaller services */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 36px);
+}
+@media (max-width: 980px) {
+  .service-grid { grid-template-columns: 1fr; }
+}
+.service-grid-item {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform .35s var(--ease-out), box-shadow .35s ease;
+}
+.service-grid-item:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.service-grid-item .service-image {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.service-grid-content { padding: clamp(16px, 2vw, 24px); }
+
+/* Service card link — makes entire card clickable */
+.service-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.service-card-link:hover .service-image img {
+  transform: scale(1.03);
+}
+
+/* Back link in detail pages */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: color .18s ease;
+}
+.back-link:hover { color: var(--ink); }
+.back-link:focus-visible { outline: 2px solid var(--focus-dark); outline-offset: 4px; border-radius: 4px; }
+
+/* Service grid actions — CTA buttons at bottom */
+.service-grid-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(16px, 2vw, 24px);
+  padding-top: 0;
+  border-top: 1px solid var(--line);
+  background: var(--card);
+}
+
+/* Button variants */
+.btn-block { width: 100%; }
+.service-grid-actions .btn,
+.service-detail-sidebar .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Service detail page layout */
+.service-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .service-detail-grid { grid-template-columns: 1fr; }
+}
+
+.service-detail-image {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.service-detail-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-lg);
+}
+
+.service-detail-section {
+  margin-bottom: 32px;
+}
+.service-detail-section h2 { margin: 0 0 12px; }
+
+.service-packages {
+  display: grid;
+  gap: 16px;
+}
+.service-package {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+.package-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.package-header h3 { margin: 0; font-family: var(--font-display); font-size: 18px; }
+.package-price { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--ink); }
+.package-duration { margin: 4px 0; font-size: 14px; color: var(--ink-2); }
+.package-includes { margin: 0; font-size: 14px; color: var(--ink-2); }
+
+/* Sidebar */
+.service-detail-sidebar { position: sticky; top: 100px; }
+.sidebar-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.sidebar-card h3 { margin: 0 0 16px; font-family: var(--font-display); font-size: 16px; }
+
+.service-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  font-size: 14px;
+}
+.service-meta dt { color: var(--muted); font-weight: 600; }
+.service-meta dd { margin: 0; color: var(--ink); }
+
+.related-services { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.related-services a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--paper-2);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background .2s ease, transform .2s ease;
+}
+.related-services a:hover { background: var(--brand-tint); transform: translateX(4px); }
+.related-number {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--pink-deep);
+  min-width: 40px;
+}
+.related-title { font-weight: 600; }
+
+/* Responsive adjustments for service/space cards */
+@media (max-width: 980px) {
+  .service-card,
+  .space-card {
+    grid-template-columns: 1fr;
+    gap: clamp(16px, 3vw, 28px);
+    margin-bottom: clamp(36px, 5vw, 56px);
+  }
+  .service-card .service-image,
+  .space-card .space-image {
+    max-width: 100%;
+  }
+}
+
 /* About page imagery */
 .about-media { display: grid; gap: 14px; }
 .about-img-stack {
@@ -416,19 +624,8 @@
 }
 .about-media .media-note { margin-top: 4px; }
 
-/* Mobile header: distinguish Book vs Menu */
+/* Mobile header menu controls */
 @media (max-width: 980px) {
-  .head-pill .btn-solid.head-book {
-    background: var(--lime);
-    color: var(--ink);
-    border-color: var(--ink);
-    box-shadow: 2px 2px 0 var(--ink);
-    font-weight: 800;
-  }
-  .head-pill .btn-solid.head-book:hover {
-    background: var(--cyan);
-    color: var(--ink);
-  }
   .menu-btn {
     background: var(--ink);
     color: var(--paper);
@@ -450,13 +647,23 @@
 .event-collections-heading h2 { margin: 0 0 8px; line-height: 1.05; }
 .event-collections-heading p { margin: 0; max-width: 64ch; }
 
+/* Bento-style masonry grid for event collections */
 .event-collections-grid {
   display: grid;
   gap: clamp(20px, 3vw, 36px);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-auto-rows: min-content;
+  align-items: start;
 }
 @media (max-width: 980px) {
-  .event-collections-grid { grid-template-columns: 1fr; }
+  .event-collections-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+@media (max-width: 620px) {
+  .event-collections-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .event-collection-card {
@@ -472,7 +679,7 @@
 .event-collection-cover {
   position: relative;
   width: 100%;
-  height: clamp(220px, 35vw, 340px);
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--paper-2);
 }
@@ -510,12 +717,12 @@
 /* Event collection link — remove default anchor underline */
 .event-collection-link { text-decoration: none; color: inherit; display: block; }
 
-/* Collection detail page */
+/* Detail page back navigation */
 .event-collection-detail-section { padding: clamp(48px, 7vw, 86px) 0; }
-.event-collection-detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-.event-collection-detail-header .btn-ghost { min-height: auto; }
+.detail-back-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.detail-back-header .btn-ghost { min-height: auto; }
 @media (max-width: 620px) {
-  .event-collection-detail-header { flex-direction: column; align-items: flex-start; }
+  .detail-back-header { flex-direction: column; align-items: flex-start; }
 }
 
 /* Collection lightbox — matches existing lightbox styling */
