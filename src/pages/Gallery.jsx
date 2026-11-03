@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
-import InstagramGallery from "../components/InstagramGallery.jsx";
+import EVENT_COLLECTIONS from "../galleryCollections.js";
 import { STUDIO_S_CONFIG } from "../config.js";
 import { usePageMeta } from "../hooks.js";
 
 export default function Gallery() {
   usePageMeta(
     "Studio S Gallery — Recent Work",
-    "Explore recent Studio S stories, spaces and productions from Instagram."
+    "Explore curated event photography collections from Studio S."
   );
-
   return (
     <>
       <section className="page-hero">
@@ -22,14 +21,30 @@ export default function Gallery() {
           </a>
         </div>
       </section>
-      <section className="section instagram-gallery-section">
+      <section className="section selected-stories-section">
         <div className="wrap">
-          <div className="instagram-gallery-heading">
+          <div className="selected-stories-heading">
             <span className="kicker">Selected stories</span>
-            <h2 className="display h-md">Work from the studio and on location.</h2>
-            <p className="mut">A curated Studio S image archive — including on-location work from Pa Gya! 10 — alongside new Instagram posts when connected.</p>
+            <h2 className="display h-md">Photographs from events we&apos;ve covered.</h2>
+            <p className="mut">A curated archive of event photography — each collection documents a story Studio S was commissioned to capture.</p>
           </div>
-          <InstagramGallery />
+          <div className="event-collections-grid">
+            {EVENT_COLLECTIONS.map((collection) => (
+              <Link key={collection.id} to={`/gallery/${collection.id}`} className="event-collection-link">
+                <article className="event-collection-card">
+                  <div className="event-collection-cover">
+                    <img src={collection.cover} alt={collection.coverAlt} loading="lazy" decoding="async" />
+                    <span className="event-collection-count">{collection.images.length} photos</span>
+                  </div>
+                  <div className="event-collection-info">
+                    <span className="event-collection-kicker">{collection.kicker}</span>
+                    <h3 className="event-collection-title">{collection.title}</h3>
+                    <p className="event-collection-desc">{collection.description}</p>
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
     </>

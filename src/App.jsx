@@ -16,6 +16,7 @@ import Contact from "./pages/Contact.jsx";
 import Privacy from "./pages/Privacy.jsx";
 import Terms from "./pages/Terms.jsx";
 import Gallery from "./pages/Gallery.jsx";
+import CollectionDetail from "./pages/CollectionDetail.jsx";
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -51,6 +52,7 @@ function AnimatedRoutes() {
         <Route path="/rate-card" element={<RateCard />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/gallery/:collectionId" element={<CollectionDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
