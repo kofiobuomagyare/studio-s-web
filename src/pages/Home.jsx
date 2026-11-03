@@ -444,7 +444,7 @@ export default function Home() {
               <h2 className="display h-xl" id="stories-title">Stories from <i>inside the house.</i></h2>
             </div>
             <a className="text-link text-link-light" href="https://www.instagram.com/studio_s.gh" target="_blank" rel="noopener">
-               <Instagram>Follow @studio_s.gh on Instagram</Instagram> <span aria-hidden="true">↗</span>
+               Follow @studio_s.gh on Instagram <span aria-hidden="true">↗</span>
             </a>
           </div>
           <InstagramGallery preview />
